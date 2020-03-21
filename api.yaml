@@ -1,0 +1,140 @@
+openapi: "3.0.0"
+info:
+  version: "1"
+  title: darfichraus.de 
+servers:
+  - url: http://dev.api.darfichraus.de/v1
+    description: development instance
+  - url: http://staging.api.darfichraus.de/v1
+    description: staging instance  
+  - url: http://api.darfichraus.de/v1
+    description: production instance
+paths:
+  /restrictions:
+    get:
+      summary: Get all published restrictions in a country
+      responses:
+        '200':
+          description: List of all restrictions in a specific country
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /restrictions/{zip}:
+    get:
+      summary: Get restrictions for specific zip
+      parameters: 
+        - in: path
+          name: zip
+          schema:
+            type: string
+          required: true
+          example: '83043'
+      responses:
+        '200':
+          description: Restrictions for given zip
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restrictions'
+  /restrictions/states/{state}:
+    get:
+      summary: Get restrictions for specific state
+      parameters: 
+        - in: path
+          name: state
+          schema:
+            type: string
+          required: true
+          example: 'Bavaria'
+      responses:
+        '200':
+          description: Restrictions for given stage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restrictions'
+  
+components:
+  schemas:
+  
+    Restriction:
+      type: object
+      required: 
+        - id
+        - areal
+        - restrictionType
+        - description
+        - restrictionDescription
+        - restrictionStart
+        - restrcitionDuration
+      properties:
+        id:
+          type: integer
+        areal:
+         type: object
+        schema:
+          $ref: '#/components/schemas/Areal'
+        restrictionType:
+            $ref: '#/components/schemas/RestrictionType'
+        description:
+          type: string
+          description: 'Give a short excerpt, why the restriction is (not) active' 
+          example: 'There are zombies everywhere'
+        restrictionDescription:
+          type: string
+          description: 'Full styled text to give a closer look to the restriction.'
+        restrictionStart:
+          type: string
+          format: date
+          description: 'Start of restriction'
+          example: '2020-03-21'
+        restrictionDuration:
+          type: number
+          description: 'Tells how many days the restriction is settled'
+          example: '30'
+        furtherInformation:
+          type: string
+          description: 'Further information for snoopy people'
+          example: 'http://link/to/more/information'
+          
+    Restrictions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Restriction'
+        
+    Areal:
+      description: 'A restriction can be city-based (zip), for the whole state (Bayern) or countrywide (country)'
+      type: string
+      enum:
+        - zip
+        - state
+        - country
+    
+    RestrictionType:
+      description: 'Give a closer look to the restriction - not every restriction is as hard as quarantine'
+      type: string
+      enum:
+        - ban
+        - quarantine
+        - none
+    
+    Error:
+      type: object
+      required:
+        - key
+        - message
+      properties:
+        key:
+          type: string
+        message:
+          type: string
+          
