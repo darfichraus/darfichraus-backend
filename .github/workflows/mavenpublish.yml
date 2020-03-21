@@ -26,6 +26,16 @@ jobs:
       run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
+        
+    - name: Copy single file to remote
+      uses: garygrossgarten/github-action-scp@release
+      with:
+          local: "target/"
+          remote: ${{ secrets.REMOTE_TARGET }}
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.PASSWORD }}
+          
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.0.7
       env:
