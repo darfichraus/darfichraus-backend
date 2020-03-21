@@ -35,5 +35,5 @@ jobs:
         PORT: 22
         KEY: ${{ secrets.SERVER_SSH_KEY }}
       with:
-        source: "target/"
+        source: "target/*.jar"
         target: "/home/darfichraus/" 
