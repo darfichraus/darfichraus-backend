@@ -54,7 +54,7 @@ public class DarfIchRausDEApplication implements CommandLineRunner {
 
         Restriction stateRestriction = new Restriction();
         stateRestriction.setAreal(Areal.STATE);
-        stateRestriction.setArealIdentifier("Bavaria");
+        stateRestriction.setArealIdentifier("Bayern");
         stateRestriction.setRestrictionDetails(restrictionDetails);
         stateRestriction.setRestrictionStart(LocalDate.of(2020, 3, 19));
         stateRestriction.setRestrictionDuration(15);
@@ -80,7 +80,7 @@ public class DarfIchRausDEApplication implements CommandLineRunner {
         restrictions.add(stateRestriction);
         restrictions.add(countryRestriction);
 
-        this.restrictionService.save(restrictions);
+        //this.restrictionService.save(restrictions);
 
     }
 }

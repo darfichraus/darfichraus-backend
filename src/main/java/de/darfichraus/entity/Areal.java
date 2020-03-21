@@ -2,6 +2,7 @@ package de.darfichraus.entity;
 
 public enum Areal {
     ZIP("zip"),
+    COUNTY("county"),
     STATE("state"),
     COUNTRY("country");
 
