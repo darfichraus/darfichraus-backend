@@ -35,14 +35,5 @@ jobs:
         PORT: 22
         KEY: ${{ secrets.SERVER_SSH_KEY }}
       with:
-        source: "target/*.jar"
+        source: "target/"
         target: "/home/darfichraus/" 
-        
-    - name: Copy single file to remote
-      uses: garygrossgarten/github-action-scp@release
-      with:
-          local: "target/darfichrausde-0.0.1-SNAPSHOT.jar"
-          remote: "/home/darfichraus/${{ github.run_id }}.jar"
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          password: ${{ secrets.REMOTE_PASSWORD }}
