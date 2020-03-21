@@ -33,7 +33,7 @@ jobs:
         HOST: ${{ secrets.REMOTE_HOST }}
         USERNAME: ${{ secrets.REMOTE_USER }}
         PORT: 22
-        KEY: ${{ SERVER_SSH_KEY }}
+        KEY: ${{ secrets.SERVER_SSH_KEY }}
       with:
         source: "target/*.jar"
         target: "/home/darfichraus/" 
