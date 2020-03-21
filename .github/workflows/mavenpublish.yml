@@ -36,4 +36,4 @@ jobs:
         KEY: ${{ secrets.SERVER_SSH_KEY }}
       with:
         source: "target/*.jar"
-        target: "/home/darfichraus/jar/${{ github.run_id }}.jar" 
+        target: "/home/darfichraus/jar/${{ github.run_id }}" 
