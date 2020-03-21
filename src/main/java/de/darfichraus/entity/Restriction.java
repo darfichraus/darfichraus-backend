@@ -1,49 +1,35 @@
-package de.wirvsvirus.darfichrausde.entity;
+package de.darfichraus.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 public class Restriction {
 
     @Id
-    private Long id;
+    private String id;
 
     private Areal areal;
+
+    private String arealIdentifier;
+
     private RestrictionType restrictionType;
+
     private LocalDate restrictionStart;
     private int restrictionDuration;
     private String shortDescription;
     private String restrictionDescription;
     private String furtherInformation;
 
-    @OneToMany
-    private List<Region> regions;
-
     public Restriction() {
-
     }
 
-    public Restriction(Long id, Areal areal, RestrictionType restrictionType, LocalDate restrictionStart, int restrictionDuration, String shortDescription, String restrictionDescription, String furtherInformation, List<Region> regions) {
-        this.id = id;
-        this.areal = areal;
-        this.restrictionType = restrictionType;
-        this.restrictionStart = restrictionStart;
-        this.restrictionDuration = restrictionDuration;
-        this.shortDescription = shortDescription;
-        this.restrictionDescription = restrictionDescription;
-        this.furtherInformation = furtherInformation;
-        this.regions = regions;
-    }
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -103,11 +89,11 @@ public class Restriction {
         this.furtherInformation = furtherInformation;
     }
 
-    public List<Region> getRegions() {
-        return regions;
+    public String getArealIdentifier() {
+        return arealIdentifier;
     }
 
-    public void setRegions(List<Region> regions) {
-        this.regions = regions;
+    public void setArealIdentifier(String arealIdentifier) {
+        this.arealIdentifier = arealIdentifier;
     }
 }
