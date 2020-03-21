@@ -30,8 +30,8 @@ jobs:
     - name: Copy single file to remote
       uses: garygrossgarten/github-action-scp@release
       with:
-          local: "target/*.jar"
-          remote: "/home/darfichraus"
+          local: "target/darfichrausde-0.0.1-SNAPSHOT.jar"
+          remote: "/home/darfichraus/{{ github.run_id }}"
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.REMOTE_PASSWORD }}
