@@ -26,3 +26,14 @@ jobs:
       run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
+        
+    - name: copy file via ssh key
+      uses: appleboy/scp-action@master
+      env:
+        HOST: ${{ secrets.REMOTE_HOST }}
+        USERNAME: ${{ secrets.REMOTE_USER }}
+        PORT: 22
+        KEY: ${{ secrets.SERVER_SSH_KEY }}
+      with:
+        source: "target/*.jar"
+        target: "/home/darfichraus/jar/${{ github.run_id }}" 
