@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@CrossOrigin(value = "*")
 public class RestrictionsController {
 
     private RestrictionService restrictionService;
