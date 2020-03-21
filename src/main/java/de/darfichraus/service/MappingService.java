@@ -1,9 +1,13 @@
 package de.darfichraus.service;
 
+import de.darfichraus.entity.Areal;
 import de.darfichraus.entity.Mapping;
 import de.darfichraus.repository.MappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.Optional;
 
 @Service
 public class MappingService {
@@ -15,15 +19,19 @@ public class MappingService {
         this.mappingRepository = mappingRepository;
     }
 
-    public Mapping getZipStateMappingByZip(String zip) {
-        return mappingRepository.findAllByZip(zip).get(0);
-    }
-
-    public Mapping getZipStateMappingByCounty(String county) {
-        return mappingRepository.findAllByCounty(county).get(0);
-    }
-
-    public Mapping getZipStateMappingByState(String state) {
-        return mappingRepository.findAllByState(state).get(0);
+    public Optional<Mapping> getMappingForAreal(final Areal areal, final String arealIdentifier) {
+        if (StringUtils.isEmpty(arealIdentifier)) {
+            return Optional.empty();
+        }
+        if (Areal.ZIP.equals(areal)) {
+            return mappingRepository.findFirstByZip(arealIdentifier);
+        } else if (Areal.COUNTY.equals(areal)) {
+            return mappingRepository.findFirstByCounty(arealIdentifier);
+        } else if (Areal.STATE.equals(areal)) {
+            return mappingRepository.findFirstByState(arealIdentifier);
+        } else if (Areal.COUNTRY.equals(areal)) {
+            return mappingRepository.findFirstByCountry(arealIdentifier);
+        }
+        return Optional.empty();
     }
 }
