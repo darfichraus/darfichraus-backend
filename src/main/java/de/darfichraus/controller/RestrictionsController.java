@@ -1,5 +1,6 @@
 package de.darfichraus.controller;
 
+import de.darfichraus.entity.Areal;
 import de.darfichraus.entity.Restriction;
 import de.darfichraus.service.RestrictionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,40 +23,17 @@ public class RestrictionsController {
     }
 
     @GetMapping("/restrictions")
-    public ResponseEntity allRestrictions() {
-
-        return this.filterByArealIdentifier("");
-    }
-
-    @GetMapping("/restrictions/{id}")
-    public ResponseEntity detailsForRestriction(@PathVariable String id) {
+    public ResponseEntity<List<Restriction>> allRestrictions() {
         return new ResponseEntity<>(
-                this.restrictionService.getRestriction(id),
+                restrictionService.getRestrictions(),
                 HttpStatus.OK
         );
     }
 
-    @GetMapping("/restrictions/zip/{zip}")
-    public ResponseEntity allRestrictionsByZip(@PathVariable String zip) {
-        return this.filterByArealIdentifier(zip);
-    }
-
-    @GetMapping("/restrictions/states/{state}")
-    public ResponseEntity allRestrictionsByState(@PathVariable String state) {
-        return this.filterByArealIdentifier(state);
-    }
-
-    private ResponseEntity<List<Restriction>> filterByArealIdentifier(String arealIdentifier) {
-
-        List<Restriction> restrictions;
-        try {
-            restrictions = arealIdentifier.isEmpty() ? this.restrictionService.getRestrictions() : this.restrictionService.getRestrictions(arealIdentifier);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-
+    @GetMapping("/restrictions/{areal}/{arealIdentifier}")
+    public ResponseEntity<List<Restriction>> detailsForRestriction(@PathVariable(name = "areal") Areal areal, @PathVariable(name = "arealIdentifier") String arealIdentifier) {
         return new ResponseEntity<>(
-                restrictions,
+                this.restrictionService.getRestrictions(areal, arealIdentifier),
                 HttpStatus.OK
         );
     }

@@ -3,6 +3,7 @@ package de.darfichraus.entity;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Restriction {
@@ -11,18 +12,20 @@ public class Restriction {
     private String id;
 
     private Areal areal;
-
     private String arealIdentifier;
 
-    private RestrictionType restrictionType;
+    private List<RestrictionDetail> restrictionDetails;
 
     private LocalDate restrictionStart;
     private int restrictionDuration;
+    private String recipient;
+    private String publisher;
     private String shortDescription;
     private String restrictionDescription;
     private String furtherInformation;
 
     public Restriction() {
+        //empty
     }
 
     public String getId() {
@@ -41,12 +44,20 @@ public class Restriction {
         this.areal = areal;
     }
 
-    public RestrictionType getRestrictionType() {
-        return restrictionType;
+    public String getArealIdentifier() {
+        return arealIdentifier;
     }
 
-    public void setRestrictionType(RestrictionType restrictionType) {
-        this.restrictionType = restrictionType;
+    public void setArealIdentifier(String arealIdentifier) {
+        this.arealIdentifier = arealIdentifier;
+    }
+
+    public List<RestrictionDetail> getRestrictionDetails() {
+        return restrictionDetails;
+    }
+
+    public void setRestrictionDetails(List<RestrictionDetail> restrictionDetails) {
+        this.restrictionDetails = restrictionDetails;
     }
 
     public LocalDate getRestrictionStart() {
@@ -63,6 +74,22 @@ public class Restriction {
 
     public void setRestrictionDuration(int restrictionDuration) {
         this.restrictionDuration = restrictionDuration;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
     public String getShortDescription() {
@@ -87,13 +114,5 @@ public class Restriction {
 
     public void setFurtherInformation(String furtherInformation) {
         this.furtherInformation = furtherInformation;
-    }
-
-    public String getArealIdentifier() {
-        return arealIdentifier;
-    }
-
-    public void setArealIdentifier(String arealIdentifier) {
-        this.arealIdentifier = arealIdentifier;
     }
 }
