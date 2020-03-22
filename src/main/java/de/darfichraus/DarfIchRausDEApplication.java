@@ -69,9 +69,9 @@ public class DarfIchRausDEApplication implements CommandLineRunner {
         countryRestriction.setRestrictionDescription("Bacon ipsum dolor amet shankle turkey corned beef bresaola, boudin filet mignon short loin fatback alcatra pastrami jerky kevin rump cupim. T-bone porchetta kevin, hamburger boudin chuck ribeye bacon short loin salami picanha capicola cupim ball tip biltong. Beef pastrami shoulder burgdoggen ball tip sausage leberkas fatback pancetta. Meatloaf pork chop ground round boudin, frankfurter venison hamburger cupim cow pig alcatra biltong ball tip turkey kielbasa. Pancetta beef ribs chicken, buffalo rump jerky shankle ground round t-bone short ribs short loin sirloin strip steak.");
         countryRestriction.setFurtherInformation("https://www.rki.de/DE/Home/homepage_node.html");
 
-        this.restrictionService.save(zipRestriction);
-        this.restrictionService.save(stateRestriction);
-        this.restrictionService.save(countryRestriction);
+        //this.restrictionService.save(zipRestriction);
+        //this.restrictionService.save(stateRestriction);
+        //this.restrictionService.save(countryRestriction);
 
     }
 }
