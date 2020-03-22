@@ -7,14 +7,13 @@ import de.darfichraus.entity.enums.RestrictionType;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface RestrictionRepository extends MongoRepository<Restriction, String> {
 
-    List<Restriction> findAllByArealAndArealIdentifierAndRestrictionEndIsGreaterThanEqualAndRestrictionStateInOrderByRestrictionStartDesc(Areal areal, String arealIdentifier, LocalDate restrictionEnd, List<RestrictionState> restrictionStates);
+    List<Restriction> findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal areal, String arealIdentifier, List<RestrictionState> restrictionStates);
 
-    List<Restriction> findAllByRestrictionTypeOrderByRestrictionStartDesc(RestrictionType restrictionType);
+    List<Restriction> findAllByRestrictionType(RestrictionType restrictionType);
 
 }

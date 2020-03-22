@@ -33,9 +33,9 @@ public class RestrictionService {
         if (restrictionType == null) {
             restrictions = this.restrictionRepository.findAll();
         } else {
-            restrictions = this.restrictionRepository.findAllByRestrictionTypeOrderByRestrictionStartDesc(restrictionType);
+            restrictions = this.restrictionRepository.findAllByRestrictionType(restrictionType);
         }
-        return restrictions.stream().filter(restriction -> !restriction.getRestrictionEnd().isBefore(LocalDate.now())).collect(Collectors.toList());
+        return sortAndFilterRestrictions(restrictions);
     }
 
     // get restrictions by areal and areal identifier
@@ -53,15 +53,22 @@ public class RestrictionService {
         }
         switch (areal) {
             case ZIP:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionEndIsGreaterThanEqualAndRestrictionStateInOrderByRestrictionStartDesc(Areal.ZIP, mapping.getZip(), LocalDate.now(), restrictionStates));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.ZIP, mapping.getZip(), restrictionStates));
             case COUNTY:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionEndIsGreaterThanEqualAndRestrictionStateInOrderByRestrictionStartDesc(Areal.COUNTY, mapping.getCounty(), LocalDate.now(), restrictionStates));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.COUNTY, mapping.getCounty(), restrictionStates));
             case STATE:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionEndIsGreaterThanEqualAndRestrictionStateInOrderByRestrictionStartDesc(Areal.STATE, mapping.getState(), LocalDate.now(), restrictionStates));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.STATE, mapping.getState(), restrictionStates));
             case COUNTRY:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionEndIsGreaterThanEqualAndRestrictionStateInOrderByRestrictionStartDesc(Areal.COUNTRY, mapping.getCountry(), LocalDate.now(), restrictionStates));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.COUNTRY, mapping.getCountry(), restrictionStates));
         }
-        return restrictions;
+
+        return sortAndFilterRestrictions(restrictions);
+    }
+
+    private List<Restriction> sortAndFilterRestrictions(List<Restriction> restrictions) {
+        return restrictions.stream().filter(restriction -> !restriction.getRestrictionEnd().isBefore(LocalDate.now()))
+                .sorted(Comparator.comparing(Restriction::getRestrictionStart).reversed())
+                .collect(Collectors.toList());
     }
 
     // save list of restrictions
