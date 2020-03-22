@@ -1,7 +1,6 @@
 package de.darfichraus;
 
 import de.darfichraus.entity.Restriction;
-import de.darfichraus.entity.RestrictionDetail;
 import de.darfichraus.entity.enums.Areal;
 import de.darfichraus.entity.enums.RestrictionState;
 import de.darfichraus.entity.enums.RestrictionType;
@@ -36,7 +35,8 @@ public class DarfIchRausDEApplication implements CommandLineRunner {
         Restriction zipRestriction = new Restriction();
         zipRestriction.setAreal(Areal.ZIP);
         zipRestriction.setArealIdentifier("36124");
-        zipRestriction.setRestrictionDetail(new RestrictionDetail(RestrictionState.RESTRICTION, RestrictionType.EVENTS_AND_ASSEMBLIES, "Maximum of 100 persons"));
+        zipRestriction.setRestrictionState(RestrictionState.RESTRICTION);
+        zipRestriction.setRestrictionType(RestrictionType.EVENTS_AND_ASSEMBLIES);
         zipRestriction.setRestrictionStart(LocalDate.of(2020, 3, 19));
         zipRestriction.setRestrictionEnd(LocalDate.of(2020, 4, 19));
         zipRestriction.setRecipient("population");
@@ -48,7 +48,8 @@ public class DarfIchRausDEApplication implements CommandLineRunner {
         Restriction stateRestriction = new Restriction();
         stateRestriction.setAreal(Areal.STATE);
         stateRestriction.setArealIdentifier("Bayern");
-        stateRestriction.setRestrictionDetail(new RestrictionDetail(RestrictionState.RESTRICTION, RestrictionType.CURFEW, "Don't leave home"));
+        stateRestriction.setRestrictionState(RestrictionState.BAN);
+        stateRestriction.setRestrictionType(RestrictionType.GASTRONOMY);
         stateRestriction.setRestrictionStart(LocalDate.of(2020, 3, 19));
         stateRestriction.setRestrictionEnd(LocalDate.of(2020, 4, 19));
         stateRestriction.setRecipient("population");
@@ -60,7 +61,8 @@ public class DarfIchRausDEApplication implements CommandLineRunner {
         Restriction countryRestriction = new Restriction();
         countryRestriction.setAreal(Areal.COUNTRY);
         countryRestriction.setArealIdentifier("Deutschland");
-        countryRestriction.setRestrictionDetail(new RestrictionDetail(RestrictionState.BAN, RestrictionType.PUBLIC_TRANSPORTATION, "No public transportation anymore"));
+        countryRestriction.setRestrictionState(RestrictionState.RESTRICTION);
+        countryRestriction.setRestrictionType(RestrictionType.RETAIL);
         countryRestriction.setRestrictionStart(LocalDate.of(2020, 3, 19));
         countryRestriction.setRestrictionEnd(LocalDate.of(2020, 4, 19));
         countryRestriction.setRecipient("population");

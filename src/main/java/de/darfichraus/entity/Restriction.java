@@ -1,6 +1,8 @@
 package de.darfichraus.entity;
 
 import de.darfichraus.entity.enums.Areal;
+import de.darfichraus.entity.enums.RestrictionState;
+import de.darfichraus.entity.enums.RestrictionType;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Entity;
@@ -22,9 +24,10 @@ public class Restriction {
     @NotNull(message = "Please provide an 'arealIdentifier'")
     private String arealIdentifier;
 
-    @NotNull(message = "Please provide an 'restrictionDetail'")
-    private RestrictionDetail restrictionDetail;
-
+    @NotNull(message = "Please provide an 'restrictionState'")
+    private RestrictionState restrictionState;
+    @NotNull(message = "Please provide an 'restrictionType'")
+    private RestrictionType restrictionType;
     @NotNull(message = "Please provide a valid 'restrictionStart' for the restriction")
     private LocalDate restrictionStart;
     @Future(message = "Please provide a valid 'restrictionEnd' for the restriction")
@@ -65,14 +68,6 @@ public class Restriction {
         this.arealIdentifier = arealIdentifier;
     }
 
-    public RestrictionDetail getRestrictionDetail() {
-        return restrictionDetail;
-    }
-
-    public void setRestrictionDetail(RestrictionDetail restrictionDetails) {
-        this.restrictionDetail = restrictionDetails;
-    }
-
     public LocalDate getRestrictionStart() {
         return restrictionStart;
     }
@@ -95,6 +90,22 @@ public class Restriction {
 
     public void setRecipient(String recipient) {
         this.recipient = recipient;
+    }
+
+    public RestrictionState getRestrictionState() {
+        return restrictionState;
+    }
+
+    public void setRestrictionState(RestrictionState restrictionState) {
+        this.restrictionState = restrictionState;
+    }
+
+    public RestrictionType getRestrictionType() {
+        return restrictionType;
+    }
+
+    public void setRestrictionType(RestrictionType restrictionType) {
+        this.restrictionType = restrictionType;
     }
 
     public String getPublisher() {
