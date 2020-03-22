@@ -1,7 +1,7 @@
 package de.darfichraus.controller;
 
-import de.darfichraus.entity.Areal;
 import de.darfichraus.entity.Restriction;
+import de.darfichraus.entity.enums.Areal;
 import de.darfichraus.service.RestrictionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@CrossOrigin(value = "*")
 public class RestrictionsController {
 
     private RestrictionService restrictionService;

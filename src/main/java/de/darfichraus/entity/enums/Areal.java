@@ -1,4 +1,4 @@
-package de.darfichraus.entity;
+package de.darfichraus.entity.enums;
 
 public enum Areal {
     ZIP("zip"),

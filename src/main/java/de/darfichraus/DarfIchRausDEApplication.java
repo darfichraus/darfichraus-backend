@@ -1,6 +1,10 @@
 package de.darfichraus;
 
-import de.darfichraus.entity.*;
+import de.darfichraus.entity.Restriction;
+import de.darfichraus.entity.RestrictionDetail;
+import de.darfichraus.entity.enums.Areal;
+import de.darfichraus.entity.enums.RestrictionState;
+import de.darfichraus.entity.enums.RestrictionType;
 import de.darfichraus.service.RestrictionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
