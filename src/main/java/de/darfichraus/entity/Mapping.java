@@ -1,9 +1,12 @@
 package de.darfichraus.entity;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
+@Document
 public class Mapping {
     @Id
     private String id;

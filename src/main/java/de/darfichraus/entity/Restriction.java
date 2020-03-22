@@ -1,11 +1,15 @@
 package de.darfichraus.entity;
 
+import de.darfichraus.entity.enums.Areal;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Document
 public class Restriction {
 
     @Id

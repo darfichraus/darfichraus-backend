@@ -1,8 +1,8 @@
 package de.darfichraus.service;
 
-import de.darfichraus.entity.Areal;
 import de.darfichraus.entity.Mapping;
 import de.darfichraus.entity.Restriction;
+import de.darfichraus.entity.enums.Areal;
 import de.darfichraus.repository.RestrictionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

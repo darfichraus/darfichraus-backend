@@ -1,5 +1,8 @@
 package de.darfichraus.entity;
 
+import de.darfichraus.entity.enums.RestrictionState;
+import de.darfichraus.entity.enums.RestrictionType;
+
 public class RestrictionDetail {
     private RestrictionState restrictionState;
     private RestrictionType restrictionType;
