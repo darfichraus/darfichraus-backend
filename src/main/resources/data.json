@@ -336,5 +336,70 @@
     "shortDescription": "Schließung aller Bibliotheken",
     "restrictionDescription": "Bibliotheken und ähnliche Einrichtungen",
     "furtherInformation": "https://www.rlp.de/de/aktuelles/einzelansicht/news/News/detail/landesregierung-beschliesst-weitere-weitreichende-massnahmen-zur-corona-bekaempfung/"
+  },
+  {
+    "areal": "STATE",
+    "arealIdentifier": "Berlin",
+    "restrictionState": "RESTRICTION",
+    "restrictionType": "RETAIL",
+    "restrictionStart": "2020-03-20",
+    "restrictionEnd": "2020-04-19",
+    "recipient": "gesamte Bevölkerung",
+    "publisher": "Berliner Senat",
+    "shortDescription": "Sonntagsöffnung für besondere Geschäfte",
+    "restrictionDescription": "Versorgung der Bevölkerung für das Anbieten von notwendigen Waren des täglichen Verbrauchs an Sonn- und Feiertagen dürfen von 12-18 Uhr geöffnet werden: Lebensmitteleinzelhandels, Getränkemärkte, Wochenmärkte, Einrichtungen zum Erwerb von Sanitätsbedarf sowie von Hör- und Sehhilfen, Drogerien, Verkaufsstellen für den Erwerb von Zeitungen, Einzelhandel für Bau-, Handwerker-, Gartenbau- und Tierbedarf. Tankstellen und Apotheken gelten die Bestimmungen des § 5 Nummer 1 und 2 BerlLadÖffG.",
+    "furtherInformation": "https://www.berlin.de/rbmskzl/aktuelles/pressemitteilungen/2020/pressemitteilung.909640.php"
+  },
+  {
+    "areal": "STATE",
+    "arealIdentifier": "Berlin",
+    "restrictionState": "RESTRICTION",
+    "restrictionType": "PUBLIC_TRANSPORTATION",
+    "restrictionStart": "2020-03-18",
+    "restrictionEnd": "2020-12-31",
+    "recipient": "gesamte Bevölkerung",
+    "publisher": "Berliner Senat",
+    "shortDescription": "Einschränkung im ÖPNV",
+    "restrictionDescription": "Die BVG fährt mit dem Ferienfahrplan, also ohne Verstärkerfahrten zu Stoßzeiten. Die S-Bahn hat ein leicht reduziertes Angebot. Die U55 fährt nicht.",
+    "furtherInformation": "https://www.berlin.de/sen/uvk/presse/pressemitteilungen/2020/pressemitteilung.908104.php"
+  },
+  {
+    "areal": "STATE",
+    "arealIdentifier": "Baden-Württemberg",
+    "restrictionState": "BAN",
+    "restrictionType": "GASTRONOMY",
+    "restrictionStart": "2020-03-18",
+    "restrictionEnd": "2020-12-31",
+    "recipient": "gesamte Bevölkerung, Gastwirte",
+    "publisher": "Landesregierung Baden-Württemberg",
+    "shortDescription": "Alle Kneipen und Gaststätten müssen schließen",
+    "restrictionDescription": "Vom Verbot ausgenommen sind allerdings Gaststätten, die Speisen und Getränke anbieten sowie Mensen, wenn sichergestellt ist, dass die Plätze für die Gäste so angeordnet werden, dass ein Abstand von mindestens 1,5 Metern zwischen den Tischen gewährleistet ist, Stehplätze so gestaltet sind, dass ein Abstand von mindestens 1,5 Metern zwischen den Gästen gewährleistet ist. Die Gaststätten dürfen frühestens ab sechs Uhr geöffnet und müssen spätestens ab 18 Uhr geschlossen werden.",
+    "furtherInformation": "https://www.baden-wuerttemberg.de/de/service/presse/pressemitteilung/pid/landesregierung-beschliesst-massnahmen-gegen-die-ausbreitung-des-coronavirus/"
+  },
+  {
+    "areal": "STATE",
+    "arealIdentifier": "Baden-Württemberg",
+    "restrictionState": "BAN",
+    "restrictionType": "CURFEW",
+    "restrictionStart": "2020-03-21",
+    "restrictionEnd": "2020-12-31",
+    "recipient": "gesamte Bevölkerung",
+    "publisher": "Landesregierung Baden-Württemberg",
+    "shortDescription": "Versammlungen von mehr als drei Personen sind verboten",
+    "restrictionDescription": "Alle Zusammenkünfte und Ansammlungen auf öffentlichen Plätzen sind verboten. Gruppenbildungen von mehr als drei Personen darf es nicht mehr geben. Wir werden das streng kontrollieren, durchsetzen und sanktionieren. Natürlich können Familien oder Menschen, die zusammenleben, weiter gemeinsam auf die Straße.",
+    "furtherInformation": "https://www.baden-wuerttemberg.de/de/service/presse/pressemitteilung/pid/landesregierung-beschliesst-massnahmen-gegen-die-ausbreitung-des-coronavirus/"
+  },
+  {
+    "areal": "STATE",
+    "arealIdentifier": "Bayern",
+    "restrictionState": "BAN",
+    "restrictionType": "CURFEW",
+    "restrictionStart": "2020-03-20",
+    "restrictionEnd": "2020-12-31",
+    "recipient": "gesamte Bevölkerung",
+    "publisher": "Landesregierung Bayern",
+    "shortDescription": "1,5m Abstand halten und nicht ohne \"triftigen Grund\" rausgehen",
+    "restrictionDescription": "Das Verlassen der eigenen Wohnung ist nur bei Vorliegen triftiger Gründe erlaubt. Diese beinhalten: Job, Arzt, Einkaufen, Familie, Sport und Hundegassi. Es ist 1,5m Abstand zu Menschen die nicht \"der eigene Hausstand\" sind.",
+    "furtherInformation": "https://www.stmgp.bayern.de/wp-content/uploads/2020/03/20200320_av_stmgp_ausgangsbeschraenkung.pdf"
   }
 ]
