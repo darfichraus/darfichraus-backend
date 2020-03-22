@@ -35,7 +35,7 @@ public class RestrictionService {
         } else {
             restrictions = this.restrictionRepository.findAllByRestrictionType(restrictionType);
         }
-        return restrictions.stream().filter(restriction -> !restriction.getRestrictionEnd().isAfter(LocalDate.now())).collect(Collectors.toList());
+        return restrictions.stream().filter(restriction -> !restriction.getRestrictionEnd().isBefore(LocalDate.now())).collect(Collectors.toList());
     }
 
     // get restrictions by areal and areal identifier
