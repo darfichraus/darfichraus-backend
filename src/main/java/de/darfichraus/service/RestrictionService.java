@@ -7,8 +7,10 @@ import de.darfichraus.repository.RestrictionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -29,43 +31,39 @@ public class RestrictionService {
     }
 
     // get restrictions by areal and areal identifier
-    // areal : zip, date, country
-    public List<Restriction> getRestrictions(Areal areal, String arealIdentifier) {
+    // areal : zip, date, county, country
+    public List<Restriction> getRestrictions(final Areal areal, final String arealIdentifier) {
         List<Restriction> restrictions = new ArrayList<>();
-
-        if (areal.equals(Areal.ZIP)) {
-            Mapping mapping = mappingService.getZipStateMappingByZip(arealIdentifier);
-
-            restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(areal, mapping.getZip()));
-            restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.STATE, mapping.getState()));
-        } else if (areal.equals(Areal.COUNTY)) {
-            Mapping mapping = mappingService.getZipStateMappingByCounty(arealIdentifier);
-
-            restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(areal, mapping.getCounty()));
-            restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.STATE, mapping.getState()));
-        } else if (areal.equals(Areal.STATE)) {
-            Mapping mapping = mappingService.getZipStateMappingByState(arealIdentifier);
-
-            restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(areal, mapping.getState()));
+        Optional<Mapping> possibleMapping = mappingService.getMappingForAreal(areal, arealIdentifier);
+        if (!possibleMapping.isPresent()) {
+            throw new IllegalArgumentException(MessageFormat.format("{0} was not found for {1}", arealIdentifier, areal));
         }
-
-        restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.COUNTRY, "Germany"));
-
+        final Mapping mapping = possibleMapping.get();
+        switch (areal) {
+            case ZIP:
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.ZIP, mapping.getZip()));
+            case COUNTY:
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.COUNTY, mapping.getCounty()));
+            case STATE:
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.STATE, mapping.getState()));
+            case COUNTRY:
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.COUNTRY, mapping.getCountry()));
+        }
         return restrictions;
     }
 
     // save list of restrictions
-    public void save(List<Restriction> restrictions) {
+    public void save(final List<Restriction> restrictions) {
         this.restrictionRepository.saveAll(restrictions);
     }
 
     // get single restriction
-    public Restriction getRestriction(String id) {
-        return this.restrictionRepository.findById(id).orElse(new Restriction());
+    public Restriction getRestriction(final String id) {
+        return this.restrictionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(MessageFormat.format("id: {0}could not be associated with a restriction", id)));
     }
 
     // delete single restriction
-    public void deleteRestrictionById(String id) {
+    public void deleteRestrictionById(final String id) {
         this.restrictionRepository.deleteById(id);
     }
 }

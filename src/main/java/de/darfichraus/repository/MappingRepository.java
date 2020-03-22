@@ -5,12 +5,15 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MappingRepository extends MongoRepository<Mapping, String> {
-    List<Mapping> findAllByZip(String zip);
+    Optional<Mapping> findFirstByZip(final String zip);
 
-    List<Mapping> findAllByCounty(String county);
+    Optional<Mapping> findFirstByCounty(final String county);
 
-    List<Mapping> findAllByState(String state);
+    Optional<Mapping> findFirstByState(final String state);
+
+    Optional<Mapping> findFirstByCountry(final String country);
 }

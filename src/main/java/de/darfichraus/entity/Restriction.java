@@ -2,6 +2,10 @@ package de.darfichraus.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -11,16 +15,22 @@ public class Restriction {
     @Id
     private String id;
 
+    @NotNull(message = "Please provide an 'areal'")
     private Areal areal;
+    @NotNull(message = "Please provide an 'arealIdentifier'")
     private String arealIdentifier;
 
     private List<RestrictionDetail> restrictionDetails;
 
+    @NotNull(message = "Please provide a valid 'restrictionStart' for the restriction")
     private LocalDate restrictionStart;
+    @Positive(message = "Please provide a valid 'restrictionDuration' for the restriction")
     private int restrictionDuration;
     private String recipient;
     private String publisher;
+    @NotEmpty(message = "Please provide a 'shortDescription' for the restriction")
     private String shortDescription;
+    @NotEmpty(message = "Please provide a 'restrictionDescription' for the restriction")
     private String restrictionDescription;
     private String furtherInformation;
 
