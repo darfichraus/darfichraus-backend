@@ -2,6 +2,7 @@ package de.darfichraus.filter;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -25,11 +26,12 @@ public class APIKeyAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
         if (!request.getMethod().equals(RequestMethod.OPTIONS.name())) {
             if (!validApiKey.equals(request.getHeader(authHeaderName))) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                throw new BadCredentialsException("The API key was not found or not the expected value.");
             }
         }
         filterChain.doFilter(request, response);
