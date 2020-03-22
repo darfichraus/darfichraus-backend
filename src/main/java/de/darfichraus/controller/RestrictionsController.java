@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -43,7 +42,7 @@ public class RestrictionsController {
 
     @PostMapping("/restrictions")
     public void newRestriction(@RequestBody @Valid Restriction restriction) {
-        restrictionService.save(Collections.singletonList(restriction));
+        restrictionService.save(restriction);
     }
 
 }

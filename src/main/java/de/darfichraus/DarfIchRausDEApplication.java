@@ -15,8 +15,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class,
@@ -35,21 +33,12 @@ public class DarfIchRausDEApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
-        List<RestrictionDetail> restrictionDetails = new ArrayList<>();
-        restrictionDetails.add(new RestrictionDetail(RestrictionState.RESTRICTION, RestrictionType.EVENTS_AND_ASSEMBLIES, "Maximum of 100 persons"));
-        restrictionDetails.add(new RestrictionDetail(RestrictionState.BAN, RestrictionType.PUBLIC_TRANSPORTATION, "No public transportation anymore"));
-        restrictionDetails.add(new RestrictionDetail(RestrictionState.RESTRICTION, RestrictionType.GASTRONOMY, "Only delivery restaurants are allowed to open"));
-
-
-        List<Restriction> restrictions = new ArrayList<>();
-
         Restriction zipRestriction = new Restriction();
         zipRestriction.setAreal(Areal.ZIP);
         zipRestriction.setArealIdentifier("36124");
-        zipRestriction.setRestrictionDetails(restrictionDetails);
+        zipRestriction.setRestrictionDetail(new RestrictionDetail(RestrictionState.RESTRICTION, RestrictionType.EVENTS_AND_ASSEMBLIES, "Maximum of 100 persons"));
         zipRestriction.setRestrictionStart(LocalDate.of(2020, 3, 19));
-        zipRestriction.setRestrictionDuration(15);
+        zipRestriction.setRestrictionEnd(LocalDate.of(2020, 4, 19));
         zipRestriction.setRecipient("population");
         zipRestriction.setPublisher("government");
         zipRestriction.setShortDescription("Stay the fuck home");
@@ -59,9 +48,9 @@ public class DarfIchRausDEApplication implements CommandLineRunner {
         Restriction stateRestriction = new Restriction();
         stateRestriction.setAreal(Areal.STATE);
         stateRestriction.setArealIdentifier("Bayern");
-        stateRestriction.setRestrictionDetails(restrictionDetails);
+        stateRestriction.setRestrictionDetail(new RestrictionDetail(RestrictionState.RESTRICTION, RestrictionType.CURFEW, "Don't leave home"));
         stateRestriction.setRestrictionStart(LocalDate.of(2020, 3, 19));
-        stateRestriction.setRestrictionDuration(15);
+        stateRestriction.setRestrictionEnd(LocalDate.of(2020, 4, 19));
         stateRestriction.setRecipient("population");
         stateRestriction.setPublisher("government");
         stateRestriction.setShortDescription("Stay the fuck home");
@@ -70,21 +59,19 @@ public class DarfIchRausDEApplication implements CommandLineRunner {
 
         Restriction countryRestriction = new Restriction();
         countryRestriction.setAreal(Areal.COUNTRY);
-        countryRestriction.setArealIdentifier("Germany");
-        countryRestriction.setRestrictionDetails(restrictionDetails);
+        countryRestriction.setArealIdentifier("Deutschland");
+        countryRestriction.setRestrictionDetail(new RestrictionDetail(RestrictionState.BAN, RestrictionType.PUBLIC_TRANSPORTATION, "No public transportation anymore"));
         countryRestriction.setRestrictionStart(LocalDate.of(2020, 3, 19));
-        countryRestriction.setRestrictionDuration(15);
+        countryRestriction.setRestrictionEnd(LocalDate.of(2020, 4, 19));
         countryRestriction.setRecipient("population");
         countryRestriction.setPublisher("government");
         countryRestriction.setShortDescription("Stay the fuck home");
         countryRestriction.setRestrictionDescription("Bacon ipsum dolor amet shankle turkey corned beef bresaola, boudin filet mignon short loin fatback alcatra pastrami jerky kevin rump cupim. T-bone porchetta kevin, hamburger boudin chuck ribeye bacon short loin salami picanha capicola cupim ball tip biltong. Beef pastrami shoulder burgdoggen ball tip sausage leberkas fatback pancetta. Meatloaf pork chop ground round boudin, frankfurter venison hamburger cupim cow pig alcatra biltong ball tip turkey kielbasa. Pancetta beef ribs chicken, buffalo rump jerky shankle ground round t-bone short ribs short loin sirloin strip steak.");
         countryRestriction.setFurtherInformation("https://www.rki.de/DE/Home/homepage_node.html");
 
-        restrictions.add(zipRestriction);
-        restrictions.add(stateRestriction);
-        restrictions.add(countryRestriction);
-
-        //this.restrictionService.save(restrictions);
+        this.restrictionService.save(zipRestriction);
+        this.restrictionService.save(stateRestriction);
+        this.restrictionService.save(countryRestriction);
 
     }
 }

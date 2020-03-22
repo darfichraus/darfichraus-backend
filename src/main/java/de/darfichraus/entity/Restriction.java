@@ -5,12 +5,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Positive;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Document
@@ -24,12 +22,13 @@ public class Restriction {
     @NotNull(message = "Please provide an 'arealIdentifier'")
     private String arealIdentifier;
 
-    private List<RestrictionDetail> restrictionDetails;
+    @NotNull(message = "Please provide an 'restrictionDetail'")
+    private RestrictionDetail restrictionDetail;
 
     @NotNull(message = "Please provide a valid 'restrictionStart' for the restriction")
     private LocalDate restrictionStart;
-    @Positive(message = "Please provide a valid 'restrictionDuration' for the restriction")
-    private int restrictionDuration;
+    @Future(message = "Please provide a valid 'restrictionEnd' for the restriction")
+    private LocalDate restrictionEnd;
     private String recipient;
     private String publisher;
     @NotEmpty(message = "Please provide a 'shortDescription' for the restriction")
@@ -66,12 +65,12 @@ public class Restriction {
         this.arealIdentifier = arealIdentifier;
     }
 
-    public List<RestrictionDetail> getRestrictionDetails() {
-        return restrictionDetails;
+    public RestrictionDetail getRestrictionDetail() {
+        return restrictionDetail;
     }
 
-    public void setRestrictionDetails(List<RestrictionDetail> restrictionDetails) {
-        this.restrictionDetails = restrictionDetails;
+    public void setRestrictionDetail(RestrictionDetail restrictionDetails) {
+        this.restrictionDetail = restrictionDetails;
     }
 
     public LocalDate getRestrictionStart() {
@@ -82,12 +81,12 @@ public class Restriction {
         this.restrictionStart = restrictionStart;
     }
 
-    public int getRestrictionDuration() {
-        return restrictionDuration;
+    public LocalDate getRestrictionEnd() {
+        return restrictionEnd;
     }
 
-    public void setRestrictionDuration(int restrictionDuration) {
-        this.restrictionDuration = restrictionDuration;
+    public void setRestrictionEnd(LocalDate restrictionEnd) {
+        this.restrictionEnd = restrictionEnd;
     }
 
     public String getRecipient() {

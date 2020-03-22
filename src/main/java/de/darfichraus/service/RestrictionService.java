@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,20 +42,23 @@ public class RestrictionService {
         final Mapping mapping = possibleMapping.get();
         switch (areal) {
             case ZIP:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.ZIP, mapping.getZip()));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionEndIsLessThanEqual(Areal.ZIP, mapping.getZip(), LocalDate.now()));
             case COUNTY:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.COUNTY, mapping.getCounty()));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionEndIsLessThanEqual(Areal.COUNTY, mapping.getCounty(), LocalDate.now()));
             case STATE:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.STATE, mapping.getState()));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionEndIsLessThanEqual(Areal.STATE, mapping.getState(), LocalDate.now()));
             case COUNTRY:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.COUNTRY, mapping.getCountry()));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionEndIsLessThanEqual(Areal.COUNTRY, mapping.getCountry(), LocalDate.now()));
         }
         return restrictions;
     }
 
     // save list of restrictions
-    public void save(final List<Restriction> restrictions) {
-        this.restrictionRepository.saveAll(restrictions);
+    public void save(final Restriction restriction) {
+        if (restriction.getRestrictionStart().isAfter(restriction.getRestrictionEnd())) {
+            throw new IllegalArgumentException("RestrictionStart must be before or equal to RestrictionEnd");
+        }
+        this.restrictionRepository.save(restriction);
     }
 
     // get single restriction
