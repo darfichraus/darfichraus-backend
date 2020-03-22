@@ -22,7 +22,7 @@ public class Restriction {
 
     private List<RestrictionDetail> restrictionDetails;
 
-    @PastOrPresent(message = "Please provide a valid 'restrictionStart' for the restriction")
+    @NotNull(message = "Please provide a valid 'restrictionStart' for the restriction")
     private LocalDate restrictionStart;
     @Positive(message = "Please provide a valid 'restrictionDuration' for the restriction")
     private int restrictionDuration;
