@@ -1,0 +1,239 @@
+openapi: "3.0.0"
+info:
+  version: "1"
+  title: darfichraus.de API
+servers:
+  - url: http://api.darfichraus.de/v1
+    description: production instance
+security:
+  - ApiKeyAuth: []
+paths:
+  /restrictions:
+    get:
+      operationId: getAllRestrictions
+      summary: Get all published restrictions possibly filtered by a RestrictionType
+      parameters:
+        - in: query
+          name: type
+          schema:
+            $ref: '#/components/schemas/RestrictionType'
+          required: false
+          example: 'PUBLIC_TRANSPORTATION'
+      responses:
+        '200':
+          description: List of all restrictions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restrictions'
+    delete:
+      operationId: deleteRestriction
+      summary: deletes a restriction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restriction'
+      responses:
+        '200':
+          description: successfully deleted Restriction
+    post:
+      operationId: addRestriction
+      summary: adds a restriction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restriction'
+      responses:
+        '200':
+          description: successfully added Restriction
+  /restrictions/{areal}/{arealIdentifier}:
+    get:
+      operationId: getRestrictionsByArealAndArealIdentifier
+      summary: Get restrictions for specific areal and arealIdentifier possibly filtered by a RestrictionState
+      parameters:
+        - in: path
+          name: areal
+          schema:
+            $ref: '#/components/schemas/Areal'
+          required: true
+          example: 'STATE'
+        - in: path
+          name: arealIdentifier
+          schema:
+            type: string
+          required: true
+          example: 'Bayern'
+        - in: query
+          name: state
+          schema:
+            $ref: '#/components/schemas/RestrictionState'
+          required: false
+          example: 'PUBLIC_TRANSPORTATION'
+      responses:
+        '200':
+          description: Restrictions for given areal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restrictions'
+  /additionalInformation/{category}:
+    get:
+      operationId: getAdditionalInformationForCategory
+      parameters:
+        - in: path
+          name: category
+          schema:
+            type: string
+          required: true
+          example: 'Bayern'
+      responses:
+        '200':
+          description: additional information for given category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdditionalInformationCategory'
+    put:
+      operationId: addAdditionalInformationToCategory
+      parameters:
+        - in: path
+          name: category
+          schema:
+            type: string
+          required: true
+          example: 'Bayern'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdditionalInformation'
+      responses:
+        '200':
+          description: successfully added Restriction
+  /additionalInformation:
+    get:
+      operationId: getAdditionalInformation
+      responses:
+        '200':
+          description: all additional information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdditionalInformationCategories'
+
+
+components:
+  schemas:
+    Restriction:
+      type: object
+      required:
+        - id
+        - areal
+        - arealIdentifier
+        - restrictionState
+        - restrictionType
+        - restrictionStart
+        - restrictionEnd
+        - recipient
+        - publisher
+        - restrictionDescription
+        - shortDescription
+      properties:
+        id:
+          type: string
+        areal:
+          $ref: '#/components/schemas/Areal'
+        arealIdentifier:
+          type: string
+        restrictionType:
+          $ref: '#/components/schemas/RestrictionType'
+        restrictionState:
+          $ref: '#/components/schemas/RestrictionState'
+        shortDescription:
+          type: string
+          description: 'Give a short excerpt, why the restriction is active'
+          example: 'There are zombies everywhere'
+        restrictionDescription:
+          type: string
+          description: 'Full styled text to give a closer look to the restriction.'
+        restrictionStart:
+          type: string
+          format: date
+          description: 'Start of restriction'
+          example: '2020-03-21'
+        restrictionEnd:
+          type: string
+          format: date
+          description: 'End of restriction'
+          example: '2020-03-21'
+        recipient:
+          type: string
+          description: 'affected group of citizens'
+          example: 'Schüler'
+        publisher:
+          type: string
+          description: 'source of information'
+          example: 'Regierung'
+        furtherInformation:
+          type: string
+          description: 'Further information for snoopy people'
+          example: 'http://link/to/more/information'
+
+    Restrictions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Restriction'
+
+    Areal:
+      description: 'A restriction can be city-based (zip), county based (Landkreis), for the whole state (Bayern) or countrywide (country)'
+      type: string
+      enum:
+        - ZIP
+        - COUNTY
+        - STATE
+        - COUNTRY
+
+    RestrictionType:
+      description: 'A restriction can affect one of these  areas of public life'
+      type: string
+      enum:
+        - PUBLIC_TRANSPORTATION
+        - EVENTS_AND_ASSEMBLIES
+        - GASTRONOMY
+        - PUBLIC_PLACES
+        - RETAIL
+        - CURFEW
+
+    RestrictionState:
+      description: 'Describes severeness of restriction'
+      type: string
+      enum:
+        - BAN
+        - RESTRICTION
+    AdditionalInformationCategories:
+      type: array
+      items:
+        $ref: '#/components/schemas/AdditionalInformationCategory'
+
+    AdditionalInformationCategory:
+      type: object
+      properties:
+        additionalInformation:
+          $ref: '#/components/schemas/AdditionalInformation'
+        category:
+          type: string
+
+    AdditionalInformation:
+      type: object
+      additionalProperties:
+        type: string
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: 'API-KEY'
+      description: 'Api-Key needed to authenticate requests'
+
