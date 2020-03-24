@@ -1,8 +1,8 @@
 package de.darfichraus.service;
 
 import de.darfichraus.entity.Mapping;
-import de.darfichraus.entity.enums.Areal;
 import de.darfichraus.repository.MappingRepository;
+import de.wirvsvirus.darfichrausde.model.Areal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

@@ -1,11 +1,11 @@
 package de.darfichraus.service;
 
 import de.darfichraus.entity.Mapping;
-import de.darfichraus.entity.Restriction;
-import de.darfichraus.entity.enums.Areal;
-import de.darfichraus.entity.enums.RestrictionState;
-import de.darfichraus.entity.enums.RestrictionType;
 import de.darfichraus.repository.RestrictionRepository;
+import de.wirvsvirus.darfichrausde.model.Areal;
+import de.wirvsvirus.darfichrausde.model.Restriction;
+import de.wirvsvirus.darfichrausde.model.RestrictionState;
+import de.wirvsvirus.darfichrausde.model.RestrictionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -85,7 +85,7 @@ public class RestrictionService {
     }
 
     // delete single restriction
-    public void deleteRestrictionById(final String id) {
-        this.restrictionRepository.deleteById(id);
+    public void deleteRestriction(final Restriction restriction) {
+        this.restrictionRepository.delete(restriction);
     }
 }
