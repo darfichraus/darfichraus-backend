@@ -129,7 +129,6 @@ components:
     Restriction:
       type: object
       required:
-        - id
         - areal
         - arealIdentifier
         - restrictionState
@@ -219,10 +218,15 @@ components:
 
     AdditionalInformationCategory:
       type: object
+      required:
+        - category
+        - additionalInformation
       properties:
         additionalInformation:
           $ref: '#/components/schemas/AdditionalInformation'
         category:
+          type: string
+        id:
           type: string
 
     AdditionalInformation:
