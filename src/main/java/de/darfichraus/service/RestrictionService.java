@@ -67,6 +67,7 @@ public class RestrictionService {
 
     private List<Restriction> sortAndFilterRestrictions(List<Restriction> restrictions) {
         return restrictions.stream().filter(restriction -> !restriction.getRestrictionEnd().isBefore(LocalDate.now()))
+                .filter(Restriction::getVerified)
                 .sorted(Comparator.comparing(Restriction::getRestrictionStart).reversed())
                 .collect(Collectors.toList());
     }
@@ -76,6 +77,7 @@ public class RestrictionService {
         if (restriction.getRestrictionStart().isAfter(restriction.getRestrictionEnd())) {
             throw new IllegalArgumentException("RestrictionStart must be before or equal to RestrictionEnd");
         }
+        restriction.setCreated(LocalDate.now());
         this.restrictionRepository.save(restriction);
     }
 

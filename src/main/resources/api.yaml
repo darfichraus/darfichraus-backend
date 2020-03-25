@@ -3,7 +3,7 @@ info:
   version: "1"
   title: darfichraus.de API
 servers:
-  - url: http://api.darfichraus.de/v1
+  - url: https://api.darfichraus.de
     description: production instance
 security:
   - ApiKeyAuth: []
@@ -179,6 +179,14 @@ components:
           type: string
           description: 'Further information for snoopy people'
           example: 'http://link/to/more/information'
+        verified:
+          type: boolean
+          description: 'whether this restriction has been verified yet'
+          default: false
+        created:
+          type: string
+          format: date
+          description: 'when this restriction has been created'
 
     Restrictions:
       type: array
