@@ -54,6 +54,6 @@ jobs:
       - name: Build Docker image
         run: docker build -t docker.pkg.github.com/$GITHUB_REPOSITORY/api:latest -t docker.pkg.github.com/$GITHUB_REPOSITORY/api:${GITHUB_SHA::8} .
       - name: Publish Docker image
-        run: docker push docker.pkg.github.com/$GITHUB_REPOSITORY
+        run: docker push docker.pkg.github.com/$GITHUB_REPOSITORY/api:latest
 
 
