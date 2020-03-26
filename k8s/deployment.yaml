@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: crimsy/sb-backend:latest
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: java-configmap
+      imagePullSecrets:
+        - name: docker-hub-crimsy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8082
+      protocol: TCP
+      targetPort: 8082
+  selector:
+    app: backend
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: backend
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  labels:
+    app: backend
+
+spec:
+  tls:
+    - hosts:
+        - crimsy.tech
+      secretName: crimsy-tech-tls
+  rules:
+    - host: crimsy.tech
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: backend
+              servicePort: 8082
