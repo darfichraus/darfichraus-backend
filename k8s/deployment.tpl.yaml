@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: crimsy/sb-backend
+          image: crimsy/sb-backend:${BITBUCKET_BUILD_NUMBER}
           imagePullPolicy: Always
           envFrom:
             - configMapRef:

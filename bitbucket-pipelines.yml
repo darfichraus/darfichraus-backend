@@ -17,8 +17,9 @@ pipelines:
         name: "Deploy to PROD"
         deployment: production
         script:
+          - envsubst < k8s/deployment.tpl.yaml > k8s/deployment.yaml
           - pipe: atlassian/kubectl-run:1.1.3
             variables:
                   KUBE_CONFIG: $KUBE_CONFIG
                   KUBECTL_COMMAND: 'apply'
-                  RESOURCE_PATH: 'k8s/'
+                  RESOURCE_PATH: 'k8s/deployment.yaml'
