@@ -1,0 +1,53 @@
+# This workflow will build a package using Maven and then publish it to GitHub docker regristry
+# For more information see: https://github.com/actions/setup-java#apache-maven-with-a-settings-path
+
+name: Release new Docker Image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml -DskipTests
+
+  artifact:
+    name: Publish - GitHub Packages
+    runs-on: ubuntu-18.04
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+          server-id: github
+          settings-path: ${{ github.workspace }}
+      - name: Publish artifact on GitHub Packages
+        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+  docker:
+    name: Publish - Docker Hub
+    runs-on: ubuntu-18.04
+    needs: [build]
+
+    steps:
+      - name: Docker Login
+        run: echo "$secrets.DOCKER_PASSWORD" | docker login docker.pkg.github.com -u "$secrets.DOCKER_USERNAME" --password-stdin
+      - name: Build Docker image
+        run: docker build -t docker.pkg.github.com/$GITHUB_REPOSITORY/api:latest -t docker.pkg.github.com/$GITHUB_REPOSITORY/api:${GITHUB_SHA::8} .
+      - name: Publish Docker image
+        run: docker push docker.pkg.github.com/$GITHUB_REPOSITORY
+
+
