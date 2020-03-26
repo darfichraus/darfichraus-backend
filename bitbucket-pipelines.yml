@@ -1,0 +1,14 @@
+image: atlassian/default-image:2
+
+pipelines:
+  default:
+    - step:
+        name: "Build and push"
+        services:
+          - docker
+        script:
+          - REPO="crimsy/sb-backend"
+          - VERSION="${BITBUCKET_BUILD_NUMBER}"
+          - echo ${DOCKERHUB_PASSWORD} | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
+          - docker build -t ${REPO}:latest -t ${REPO} ${REPO}:${VERSION} .
+          - docker push ${REPO}:latest
