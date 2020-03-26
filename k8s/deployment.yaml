@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: crimsy/sb-backend:latest
+          image: crimsy/sb-backend
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
