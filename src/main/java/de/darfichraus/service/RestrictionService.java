@@ -72,18 +72,28 @@ public class RestrictionService {
                 .collect(Collectors.toList());
     }
 
-    // save list of restrictions
+    // save restrictions
     public void save(final Restriction restriction) {
         if (restriction.getRestrictionStart().isAfter(restriction.getRestrictionEnd())) {
             throw new IllegalArgumentException("RestrictionStart must be before or equal to RestrictionEnd");
         }
         restriction.setCreated(LocalDate.now());
+        restriction.setModified(LocalDate.now());
+        this.restrictionRepository.save(restriction);
+    }
+
+    // update restriction
+    public void update(final Restriction restriction) {
+        if (restriction.getRestrictionStart().isAfter(restriction.getRestrictionEnd())) {
+            throw new IllegalArgumentException("RestrictionStart must be before or equal to RestrictionEnd");
+        }
+        restriction.setModified(LocalDate.now());
         this.restrictionRepository.save(restriction);
     }
 
     // get single restriction
-    public Restriction getRestriction(final String id) {
-        return this.restrictionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(MessageFormat.format("id: {0} could not be associated with a restriction", id)));
+    public List<Restriction> getAllRestrictions() {
+        return this.restrictionRepository.findAll();
     }
 
     // delete single restriction

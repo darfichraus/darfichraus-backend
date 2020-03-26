@@ -32,13 +32,7 @@ public class RestrictionsController implements RestrictionsApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteRestriction(@Valid Restriction restriction) {
-        restrictionService.deleteRestriction(restriction);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<List<Restriction>> getAllRestrictions(@Valid RestrictionType type) {
+    public ResponseEntity<List<Restriction>> getAllValidRestrictions(@Valid RestrictionType type) {
         return ResponseEntity.ok(restrictionService.getRestrictions(type));
     }
 

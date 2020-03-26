@@ -3,14 +3,16 @@ info:
   version: "1"
   title: darfichraus.de API
 servers:
+  - url: https://crimsy.tech
+    description: new production instance
   - url: https://api.darfichraus.de
-    description: production instance
+    description: old production instance
 security:
   - ApiKeyAuth: []
 paths:
   /restrictions:
     get:
-      operationId: getAllRestrictions
+      operationId: getAllValidRestrictions
       summary: Get all published restrictions possibly filtered by a RestrictionType
       parameters:
         - in: query
@@ -26,17 +28,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Restrictions'
-    delete:
-      operationId: deleteRestriction
-      summary: deletes a restriction
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Restriction'
-      responses:
-        '200':
-          description: successfully deleted Restriction
     post:
       operationId: addRestriction
       summary: adds a restriction
@@ -111,7 +102,7 @@ paths:
               $ref: '#/components/schemas/AdditionalInformation'
       responses:
         '200':
-          description: successfully added Restriction
+          description: successfully added additional information
   /additionalInformation:
     get:
       operationId: getAdditionalInformation
@@ -122,6 +113,86 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AdditionalInformationCategories'
+  /admin/restrictions:
+    delete:
+      operationId: deleteRestriction
+      summary: deletes a restriction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restriction'
+      responses:
+        '200':
+          description: successfully deleted Restriction
+    get:
+      operationId: getAllRestrictions
+      summary: Get all published restrictions
+      responses:
+        '200':
+          description: List of all restrictions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restrictions'
+    put:
+      operationId: updateRestriction
+      summary: updates a restriction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restriction'
+      responses:
+        '200':
+          description: successfully updated Restriction
+  /subscriptions:
+    post:
+      operationId: addSubscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+      responses:
+        '200':
+          description: successfully added additional information
+    get:
+      operationId: getAllSubscriptions
+      summary: Get all subscriptions
+      responses:
+        '200':
+          description: List of all restrictions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriptions'
+
+  /subscriptions/{areal}/{arealIdentifier}:
+    get:
+      operationId: getSubscriptionsByArealAndArealIdentifier
+      summary: Get subscriptions for specific areal and arealIdentifier
+      parameters:
+        - in: path
+          name: areal
+          schema:
+            $ref: '#/components/schemas/Areal'
+          required: true
+          example: 'STATE'
+        - in: path
+          name: arealIdentifier
+          schema:
+            type: string
+          required: true
+          example: 'Bayern'
+      responses:
+        '200':
+          description: Subscriptions for given areal and arealIdentifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriptions'
+
 
 
 components:
@@ -187,6 +258,10 @@ components:
           type: string
           format: date
           description: 'when this restriction has been created'
+        modified:
+          type: string
+          format: date
+          description: 'when this restriction has been updated'
 
     Restrictions:
       type: array
@@ -241,6 +316,37 @@ components:
       type: object
       additionalProperties:
         type: string
+
+    Subscriptions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Subscription'
+
+    Subscription:
+      type: object
+      required:
+        - email
+        - areal
+        - arealIdentifier
+        - contactAllowed
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          example: 'a@b.com'
+        areal:
+          $ref: '#/components/schemas/Areal'
+        arealIdentifier:
+          type: string
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestrictionType'
+        created:
+          type: string
+          format: date
+          description: 'when this subscription has been created'
 
   securitySchemes:
     ApiKeyAuth:
