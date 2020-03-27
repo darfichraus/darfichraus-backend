@@ -24,7 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${http.auth.headerName}")
     private String authHeaderName;
 
-    @Value("${http.auth.validApiKey}")
+    @Value("${API_KEY}")
     private String authHeaderValue;
 
     @Override

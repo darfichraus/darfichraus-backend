@@ -17,9 +17,12 @@ spec:
         - name: backend
           image: crimsy/sb-backend:${BITBUCKET_COMMIT}
           imagePullPolicy: Always
-          envFrom:
-            - configMapRef:
-                name: java-configmap
+          env:
+            - name: API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: backend-api-key
+                    key: api-key
       imagePullSecrets:
         - name: docker-hub-crimsy
 ---
