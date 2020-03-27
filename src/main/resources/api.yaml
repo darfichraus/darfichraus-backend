@@ -3,9 +3,9 @@ info:
   version: "1"
   title: darfichraus.de API
 servers:
-  - url: https://crimsy.tech
+  - url: https://api.crimsy.tech
     description: new production instance
-  - url: https://api.darfichraus.de
+  - url: https://api.dev.crimsy.tech
     description: old production instance
 security:
   - ApiKeyAuth: []
