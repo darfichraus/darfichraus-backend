@@ -56,7 +56,7 @@ spec:
         - api.crimsy.tech
       secretName: crimsy-tech-tls
   rules:
-    - host: crimsy.tech
+    - host: api.crimsy.tech
       http:
         paths:
           - path: /
