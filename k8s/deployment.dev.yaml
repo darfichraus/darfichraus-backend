@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: crimsy/sb-backend:develop
+          image: crimsy/sb-backend
           imagePullPolicy: Always
           env:
             - name: API_KEY

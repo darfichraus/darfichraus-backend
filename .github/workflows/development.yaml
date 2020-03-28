@@ -1,7 +1,7 @@
 # This workflow will build a package using Maven and then publish it to GitHub docker registry
 # For more information see: https://github.com/actions/setup-java#apache-maven-with-a-settings-path
 
-name: Release new Docker Image
+name: Deploy to Staging
 env:
   NAMESPACE: development
   REPO: crimsy/sb-backend
@@ -44,13 +44,13 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: deploy to cluster
-        uses: steebchen/kubectl@v1.0.0
+        uses: docker://benjamsch/kubectl
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
         with:
           args: set image --record deployment/backend backend=${REPO}:${GITHUB_RUN_ID} -n ${NAMESPACE}
       - name: verify deployment
-        uses: steebchen/kubectl@v1.0.0
+        uses: docker://benjamsch/kubectl
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
         with:
