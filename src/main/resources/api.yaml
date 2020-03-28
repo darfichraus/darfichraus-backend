@@ -167,6 +167,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Subscriptions'
+    delete:
+      operationId: deleteSubscription
+      summary: deletes a Subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+      responses:
+        '200':
+          description: successfully deleted Subscription
 
   /subscriptions/{areal}/{arealIdentifier}:
     get:

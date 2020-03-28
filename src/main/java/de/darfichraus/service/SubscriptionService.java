@@ -56,4 +56,9 @@ public class SubscriptionService {
 
         return subscriptions;
     }
+
+    public void delete(Subscription subscription) {
+        this.subscriptionRepository.delete(subscription);
+    }
+
 }

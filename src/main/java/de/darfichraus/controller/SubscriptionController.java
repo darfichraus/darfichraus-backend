@@ -30,6 +30,12 @@ public class SubscriptionController implements SubscriptionsApi {
     }
 
     @Override
+    public ResponseEntity<Void> deleteSubscription(@Valid Subscription subscription) {
+        subscriptionService.delete(subscription);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<List<Subscription>> getAllSubscriptions() {
         return ResponseEntity.ok(subscriptionService.getAllSubscriptions());
     }
