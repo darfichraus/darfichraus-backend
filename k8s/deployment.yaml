@@ -56,13 +56,33 @@ metadata:
 spec:
   tls:
     - hosts:
-        - api.crimsy.tech
-      secretName: crimsy-tech-tls
+        - api.darfichraus.de
+      secretName: api-darfichraus-de-tls
+    - hosts:
+        - api.darfichraus.com
+      secretName: api-darfichrausi-com-tls
+    - hosts:
+        - api.darfichraus.info
+      secretName: api-darfichraus-info-tls
   rules:
-    - host: api.crimsy.tech
+    - host: api.darfichraus.de
       http:
         paths:
           - path: /
             backend:
               serviceName: backend
               servicePort: 8082
+    - host: api.darfichraus.com
+        http:
+          paths:
+              - path: /
+                backend:
+                  serviceName: backend
+                  servicePort: 8082
+    - host: api.darfichraus.info
+        http:
+          paths:
+              - path: /
+                backend:
+                  serviceName: backend
+                  servicePort: 8082
