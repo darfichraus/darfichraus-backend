@@ -1,0 +1,60 @@
+# This workflow will build a package using Maven and then publish it to GitHub docker registry
+# For more information see: https://github.com/actions/setup-java#apache-maven-with-a-settings-path
+
+name: Release new Docker Image
+env:
+   NAMESPACE: production
+   REPO: crimsy/sb-backend 
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  docker:
+    name: Publish to Docker Registry 
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+          settings-path: ${{ github.workspace }}
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven- 
+      - name: Build with Maven
+        run: mvn -B -f pom.xml clean package -DskipTests
+      - name: Docker Login
+        run: echo ${{secrets.DOCKER_PASSWORD}} | docker login -u ${{secrets.DOCKER_USERNAME}} --password-stdin
+      - name: Build Docker image
+        run: docker build -t ${REPO} .
+      - name: tag image with sha
+        run: docker tag ${REPO} ${REPO}:${GITHUB_SHA}
+      - name: Publish Docker image
+        run: docker push ${REPO}
+  deploy:
+    name: deploy to cluster
+    needs: [docker]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: deploy to cluster
+      uses: steebchen/kubectl@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+      with:
+        args: set image --record deployment/backend backend=${REPO}:${GITHUB_SHA} -n production
+    - name: verify deployment
+      uses: steebchen/kubectl@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+      with:
+        args: '"rollout status deployment/backend -n ${NAMESPACE}"'     
+
