@@ -35,7 +35,7 @@ jobs:
         run: echo ${{secrets.DOCKER_PASSWORD}} | docker login -u ${{secrets.DOCKER_USERNAME}} --password-stdin
       - name: Build Docker image
         run: docker build -t ${REPO} .
-      - name: Publish Docker image
+      - name: tag image with sha
         run: docker tag ${REPO} ${REPO}:${GITHUB_SHA::8}
       - name: Publish Docker image
         run: docker push ${REPO}
@@ -50,7 +50,7 @@ jobs:
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
       with:
-        args: set image --record deployment/backend container=${REPO}:${GITHUB_SHA::8} -n production .
+        args: set image --record deployment/backend container=${{ REPO }}:${{ GITHUB_SHA::8 }}-n production .
     - name: verify deployment
       uses: steebchen/kubectl@master
       env:
