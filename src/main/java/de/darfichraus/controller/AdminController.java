@@ -24,8 +24,8 @@ public class AdminController implements AdminApi {
 
     @Override
     public ResponseEntity<Void> deleteRestriction(@Valid Restriction restriction) {
-        restrictionService.deleteRestriction(restriction);
-        return new ResponseEntity<>(HttpStatus.OK);
+        HttpStatus status = restrictionService.deleteRestriction(restriction) ? HttpStatus.NO_CONTENT : HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(status);
     }
 
     @Override

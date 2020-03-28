@@ -57,8 +57,12 @@ public class SubscriptionService {
         return subscriptions;
     }
 
-    public void delete(Subscription subscription) {
+    public boolean delete(Subscription subscription) {
+        if (!subscriptionRepository.existsById(subscription.getId())) {
+            return false;
+        }
         this.subscriptionRepository.delete(subscription);
+        return true;
     }
 
 }

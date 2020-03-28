@@ -97,7 +97,11 @@ public class RestrictionService {
     }
 
     // delete single restriction
-    public void deleteRestriction(final Restriction restriction) {
+    public boolean deleteRestriction(final Restriction restriction) {
+        if (!restrictionRepository.existsById(restriction.getId())) {
+            return false;
+        }
         this.restrictionRepository.delete(restriction);
+        return true;
     }
 }
