@@ -3,8 +3,8 @@
 
 name: Release new Docker Image
 env:
-   NAMESPACE: production
-   REPO: crimsy/sb-backend 
+  NAMESPACE: development
+  REPO: crimsy/sb-backend
 
 on:
   push:
@@ -13,7 +13,7 @@ on:
 
 jobs:
   docker:
-    name: Publish to Docker Registry 
+    name: Publish to Docker Registry
     runs-on: ubuntu-latest
 
     steps:
@@ -34,27 +34,27 @@ jobs:
       - name: Docker Login
         run: echo ${{secrets.DOCKER_PASSWORD}} | docker login -u ${{secrets.DOCKER_USERNAME}} --password-stdin
       - name: Build Docker image
-        run: docker build -t ${REPO} .
+        run: docker build -t ${REPO}:${NAMESPACE} .
       - name: tag image with sha
-        run: docker tag ${REPO} ${REPO}:${NAMESPACE}-${GITHUB_SHA}
+        run: docker tag ${REPO}:${NAMESPACE} ${REPO}:${NAMESPACE}-${GITHUB_SHA}
       - name: Publish Docker image
-        run: docker push ${REPO}
+        run: docker push ${REPO}:${NAMESPACE}
   deploy:
     name: deploy to cluster
     needs: [docker]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: deploy to cluster
-      uses: steebchen/kubectl@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
-      with:
-        args: set image --record deployment/backend backend=${REPO}:${NAMESPACE}-${GITHUB_SHA} -n ${NAMESPACE}
-    - name: verify deployment
-      uses: steebchen/kubectl@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
-      with:
-        args: '"rollout status deployment/backend -n ${NAMESPACE}"'     
+      - uses: actions/checkout@master
+      - name: deploy to cluster
+        uses: steebchen/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+        with:
+          args: set image --record deployment/backend backend=${REPO}:${NAMESPACE}-${GITHUB_SHA} -n ${NAMESPACE}
+      - name: verify deployment
+        uses: steebchen/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+        with:
+          args: '"rollout status deployment/backend -n ${NAMESPACE}"'
 
