@@ -50,7 +50,7 @@ jobs:
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
       with:
-        args: set image --record deployment/backend container=${REPO}:${GITHUB_SHA} -n production .
+        args: set image --record deployment/backend backend=${REPO}:${GITHUB_SHA} -n production
     - name: verify deployment
       uses: steebchen/kubectl@master
       env:
