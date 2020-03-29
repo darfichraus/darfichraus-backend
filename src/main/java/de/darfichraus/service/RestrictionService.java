@@ -77,6 +77,7 @@ public class RestrictionService {
         if (restriction.getRestrictionStart().isAfter(restriction.getRestrictionEnd())) {
             throw new IllegalArgumentException("RestrictionStart must be before or equal to RestrictionEnd");
         }
+        restriction.setVerified(false);
         restriction.setCreated(LocalDate.now());
         restriction.setModified(LocalDate.now());
         this.restrictionRepository.save(restriction);

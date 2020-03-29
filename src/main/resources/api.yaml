@@ -113,6 +113,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AdditionalInformationCategories'
+  /login:
+    post:
+      operationId: authenticateUser
+      summary: get jwt token for credentials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: successfully deleted Restriction
   /admin/restrictions:
     delete:
       operationId: deleteRestriction
