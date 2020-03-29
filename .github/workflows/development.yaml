@@ -45,14 +45,12 @@ jobs:
       - uses: actions/checkout@master
       - name: deploy to cluster
         uses: docker://nickgronow/kubectl
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
         with:
+          config_data: ${{ secrets.KUBE_CONFIG }}
           args: set image --record deployment/backend backend=${REPO}:${GITHUB_RUN_ID} -n ${NAMESPACE}
       - name: verify deployment
         uses: docker://nickgronow/kubectl
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
         with:
+          config_data: ${{ secrets.KUBE_CONFIG }}
           args: '"rollout status deployment/backend -n ${NAMESPACE}"'
 
