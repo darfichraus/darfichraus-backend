@@ -3,10 +3,10 @@ info:
   version: "1"
   title: darfichraus.de API
 servers:
-  - url: https://api.crimsy.tech
-    description: new production instance
+  - url: https://api.darfichraus.de
+    description: production instance
   - url: https://api.dev.crimsy.tech
-    description: old production instance
+    description: development instance
 security:
   - ApiKeyAuth: []
 paths:
@@ -37,7 +37,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Restriction'
       responses:
-        '200':
+        '204':
           description: successfully added Restriction
   /restrictions/{areal}/{arealIdentifier}:
     get:
@@ -86,7 +86,96 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AdditionalInformationCategory'
+  /additionalInformation:
+    get:
+      operationId: getAdditionalInformation
+      responses:
+        '200':
+          description: all additional information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdditionalInformationCategories'
+  /login:
+    post:
+      operationId: authenticateUser
+      summary: get jwt token for credentials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: jwt token for user
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: my-long-jwt-token
+
+  /admin/register:
+    post:
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
+      operationId: registerUser
+      summary: adds a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '204':
+          description: successfully deleted Restriction
+  /admin/restrictions:
+    delete:
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
+      operationId: deleteRestriction
+      summary: deletes a restriction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restriction'
+      responses:
+        '204':
+          description: successfully deleted Restriction
+    get:
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
+      operationId: getAllRestrictions
+      summary: Get all published restrictions
+      responses:
+        '200':
+          description: List of all restrictions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restrictions'
     put:
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
+      operationId: updateRestriction
+      summary: updates a restriction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restriction'
+      responses:
+        '204':
+          description: successfully updated Restriction
+  /admin/additionalInformation:
+    post:
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
       operationId: addAdditionalInformationToCategory
       parameters:
         - in: path
@@ -103,49 +192,6 @@ paths:
       responses:
         '200':
           description: successfully added additional information
-  /additionalInformation:
-    get:
-      operationId: getAdditionalInformation
-      responses:
-        '200':
-          description: all additional information
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdditionalInformationCategories'
-  /admin/restrictions:
-    delete:
-      operationId: deleteRestriction
-      summary: deletes a restriction
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Restriction'
-      responses:
-        '200':
-          description: successfully deleted Restriction
-    get:
-      operationId: getAllRestrictions
-      summary: Get all published restrictions
-      responses:
-        '200':
-          description: List of all restrictions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Restrictions'
-    put:
-      operationId: updateRestriction
-      summary: updates a restriction
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Restriction'
-      responses:
-        '200':
-          description: successfully updated Restriction
   /subscriptions:
     post:
       operationId: addSubscription
@@ -155,7 +201,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Subscription'
       responses:
-        '200':
+        '204':
           description: successfully added additional information
     get:
       operationId: getAllSubscriptions
@@ -167,6 +213,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Subscriptions'
+    delete:
+      operationId: deleteSubscription
+      summary: deletes a Subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+      responses:
+        '204':
+          description: successfully deleted Subscription
 
   /subscriptions/{areal}/{arealIdentifier}:
     get:
@@ -276,6 +333,17 @@ components:
         - COUNTY
         - STATE
         - COUNTRY
+    Credentials:
+      type: object
+      description: 'user credentials for login'
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
 
     RestrictionType:
       description: 'A restriction can affect one of these  areas of public life'
@@ -354,4 +422,8 @@ components:
       in: header
       name: 'API-KEY'
       description: 'Api-Key needed to authenticate requests'
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 

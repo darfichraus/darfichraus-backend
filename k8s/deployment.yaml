@@ -23,6 +23,11 @@ spec:
                 secretKeyRef:
                   name: backend-api-key
                   key: api-key
+            - name: salt
+              valueFrom:
+                secretKeyRef:
+                  name: backend-salzig
+                  key: salt
       imagePullSecrets:
         - name: docker-hub-crimsy
 ---
@@ -58,12 +63,6 @@ spec:
     - hosts:
         - api.darfichraus.de
       secretName: api-darfichraus-de-tls
-    - hosts:
-        - api.darfichraus.com
-      secretName: api-darfichrausi-com-tls
-    - hosts:
-        - api.darfichraus.info
-      secretName: api-darfichraus-info-tls
   rules:
     - host: api.darfichraus.de
       http:
@@ -72,17 +71,3 @@ spec:
             backend:
               serviceName: backend
               servicePort: 8082
-    - host: api.darfichraus.com
-        http:
-          paths:
-              - path: /
-                backend:
-                  serviceName: backend
-                  servicePort: 8082
-    - host: api.darfichraus.info
-        http:
-          paths:
-              - path: /
-                backend:
-                  serviceName: backend
-                  servicePort: 8082

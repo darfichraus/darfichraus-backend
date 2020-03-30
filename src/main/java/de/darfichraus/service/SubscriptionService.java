@@ -52,8 +52,20 @@ public class SubscriptionService {
                 subscriptions.addAll(this.subscriptionRepository.findAllByArealAndArealIdentifier(Areal.STATE, mapping.getState()));
             case COUNTRY:
                 subscriptions.addAll(this.subscriptionRepository.findAllByArealAndArealIdentifier(Areal.COUNTRY, mapping.getCountry()));
+                break;
+            default:
+                return new ArrayList<>();
         }
 
         return subscriptions;
     }
+
+    public boolean delete(Subscription subscription) {
+        if (!subscriptionRepository.existsById(subscription.getId())) {
+            return false;
+        }
+        this.subscriptionRepository.delete(subscription);
+        return true;
+    }
+
 }

@@ -28,7 +28,7 @@ jobs:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven- 
+            ${{ runner.os }}-maven-
       - name: Build with Maven
         run: mvn -B -f pom.xml clean package -DskipTests
       - name: Docker Login
@@ -44,15 +44,13 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: deploy to cluster
-        uses: docker://benjamsch/kubectl
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+        uses: docker://nickgronow/kubectl
         with:
+          config_data: ${{ secrets.KUBE_CONFIG }}
           args: set image --record deployment/backend backend=${REPO}:${GITHUB_RUN_ID} -n ${NAMESPACE}
       - name: verify deployment
-        uses: docker://benjamsch/kubectl
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+        uses: docker://nickgronow/kubectl
         with:
+          config_data: ${{ secrets.KUBE_CONFIG }}
           args: '"rollout status deployment/backend -n ${NAMESPACE}"'
 

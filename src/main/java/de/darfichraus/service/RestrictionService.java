@@ -60,6 +60,9 @@ public class RestrictionService {
                 restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.STATE, mapping.getState(), restrictionStates));
             case COUNTRY:
                 restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.COUNTRY, mapping.getCountry(), restrictionStates));
+                break;
+            default:
+                return new ArrayList<>();
         }
 
         return sortAndFilterRestrictions(restrictions);
@@ -77,6 +80,7 @@ public class RestrictionService {
         if (restriction.getRestrictionStart().isAfter(restriction.getRestrictionEnd())) {
             throw new IllegalArgumentException("RestrictionStart must be before or equal to RestrictionEnd");
         }
+        restriction.setVerified(false);
         restriction.setCreated(LocalDate.now());
         restriction.setModified(LocalDate.now());
         this.restrictionRepository.save(restriction);
@@ -97,7 +101,11 @@ public class RestrictionService {
     }
 
     // delete single restriction
-    public void deleteRestriction(final Restriction restriction) {
+    public boolean deleteRestriction(final Restriction restriction) {
+        if (!restrictionRepository.existsById(restriction.getId())) {
+            return false;
+        }
         this.restrictionRepository.delete(restriction);
+        return true;
     }
 }

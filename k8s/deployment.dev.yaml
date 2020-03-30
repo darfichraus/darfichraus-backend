@@ -23,6 +23,11 @@ spec:
                 secretKeyRef:
                   name: backend-api-key
                   key: api-key
+            - name: salt
+              valueFrom:
+                secretKeyRef:
+                  name: backend-salzig
+                  key: salt
       imagePullSecrets:
         - name: docker-hub-crimsy
 ---
