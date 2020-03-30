@@ -108,6 +108,12 @@ paths:
       responses:
         '200':
           description: jwt token for user
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: my-long-jwt-token
+
   /admin/register:
     post:
       security:

@@ -60,6 +60,9 @@ public class RestrictionService {
                 restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.STATE, mapping.getState(), restrictionStates));
             case COUNTRY:
                 restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.COUNTRY, mapping.getCountry(), restrictionStates));
+                break;
+            default:
+                return new ArrayList<>();
         }
 
         return sortAndFilterRestrictions(restrictions);
