@@ -3,10 +3,10 @@ info:
   version: "1"
   title: darfichraus.de API
 servers:
-  - url: https://api.crimsy.tech
-    description: new production instance
+  - url: https://api.darfichraus.de
+    description: production instance
   - url: https://api.dev.crimsy.tech
-    description: old production instance
+    description: development instance
 security:
   - ApiKeyAuth: []
 paths:
@@ -112,6 +112,7 @@ paths:
     post:
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
       operationId: registerUser
       summary: adds a user
       requestBody:
@@ -126,6 +127,7 @@ paths:
     delete:
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
       operationId: deleteRestriction
       summary: deletes a restriction
       requestBody:
@@ -139,6 +141,7 @@ paths:
     get:
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
       operationId: getAllRestrictions
       summary: Get all published restrictions
       responses:
@@ -151,6 +154,7 @@ paths:
     put:
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
       operationId: updateRestriction
       summary: updates a restriction
       requestBody:
@@ -165,6 +169,7 @@ paths:
     post:
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
       operationId: addAdditionalInformationToCategory
       parameters:
         - in: path
