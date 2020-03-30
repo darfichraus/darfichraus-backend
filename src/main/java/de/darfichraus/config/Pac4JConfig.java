@@ -6,7 +6,6 @@ import org.pac4j.core.config.Config;
 import org.pac4j.core.credentials.password.PasswordEncoder;
 import org.pac4j.core.credentials.password.SpringSecurityPasswordEncoder;
 import org.pac4j.http.client.direct.DirectBearerAuthClient;
-import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration;
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
 import org.pac4j.jwt.credentials.authenticator.JwtAuthenticator;
 import org.pac4j.mongo.profile.service.MongoProfileService;
@@ -41,14 +40,8 @@ public class Pac4JConfig {
     }
 
     @Bean
-    public SecretEncryptionConfiguration secretEncryptionConfiguration() {
-        return new SecretEncryptionConfiguration(salt);
-    }
-
-    @Bean
     public JwtAuthenticator jwtAuthenticator() {
         final JwtAuthenticator jwtAuthenticator = new JwtAuthenticator();
-        jwtAuthenticator.addEncryptionConfiguration(secretEncryptionConfiguration());
         jwtAuthenticator.addSignatureConfiguration(secretSignatureConfiguration());
         return jwtAuthenticator;
     }
