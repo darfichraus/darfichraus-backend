@@ -1,13 +1,11 @@
 package de.darfichraus.config;
 
 import com.mongodb.MongoClient;
-import com.nimbusds.jose.EncryptionMethod;
-import com.nimbusds.jose.JWEAlgorithm;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.credentials.password.PasswordEncoder;
 import org.pac4j.core.credentials.password.SpringSecurityPasswordEncoder;
-import org.pac4j.http.client.direct.HeaderClient;
+import org.pac4j.http.client.direct.DirectBearerAuthClient;
 import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration;
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
 import org.pac4j.jwt.credentials.authenticator.JwtAuthenticator;
@@ -32,7 +30,7 @@ public class Pac4JConfig {
 
     @Bean
     public Config config() {
-        HeaderClient jwtClient = new HeaderClient("Authorization", "Bearer", jwtAuthenticator());
+        DirectBearerAuthClient jwtClient = new DirectBearerAuthClient(jwtAuthenticator());
         Clients clients = new Clients(jwtClient);
         return new Config(clients);
     }
@@ -44,7 +42,7 @@ public class Pac4JConfig {
 
     @Bean
     public SecretEncryptionConfiguration secretEncryptionConfiguration() {
-        return new SecretEncryptionConfiguration(salt, JWEAlgorithm.A256GCMKW, EncryptionMethod.A256GCM);
+        return new SecretEncryptionConfiguration(salt);
     }
 
     @Bean

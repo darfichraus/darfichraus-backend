@@ -3,13 +3,10 @@ package de.darfichraus.controller;
 import de.darfichraus.service.AdditionalInformationService;
 import de.wirvsvirus.darfichrausde.api.AdditionalInformationApi;
 import de.wirvsvirus.darfichrausde.model.AdditionalInformationCategory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class AdditionalInformationController implements AdditionalInformationApi {
@@ -18,13 +15,6 @@ public class AdditionalInformationController implements AdditionalInformationApi
 
     public AdditionalInformationController(AdditionalInformationService additionalInformationService) {
         this.additionalInformationService = additionalInformationService;
-    }
-
-
-    @Override
-    public ResponseEntity<Void> addAdditionalInformationToCategory(String category, @Valid Map<String, String> requestBody) {
-        additionalInformationService.addAdditionalInformationToCategory(category, requestBody);
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override

@@ -37,7 +37,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Restriction'
       responses:
-        '200':
+        '204':
           description: successfully added Restriction
   /restrictions/{areal}/{arealIdentifier}:
     get:
@@ -86,23 +86,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AdditionalInformationCategory'
-    put:
-      operationId: addAdditionalInformationToCategory
-      parameters:
-        - in: path
-          name: category
-          schema:
-            type: string
-          required: true
-          example: 'Bayern'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AdditionalInformation'
-      responses:
-        '200':
-          description: successfully added additional information
   /additionalInformation:
     get:
       operationId: getAdditionalInformation
@@ -124,9 +107,25 @@ paths:
               $ref: '#/components/schemas/Credentials'
       responses:
         '200':
+          description: jwt token for user
+  /admin/register:
+    post:
+      security:
+        - BearerAuth: []
+      operationId: registerUser
+      summary: adds a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '204':
           description: successfully deleted Restriction
   /admin/restrictions:
     delete:
+      security:
+        - BearerAuth: []
       operationId: deleteRestriction
       summary: deletes a restriction
       requestBody:
@@ -135,9 +134,11 @@ paths:
             schema:
               $ref: '#/components/schemas/Restriction'
       responses:
-        '200':
+        '204':
           description: successfully deleted Restriction
     get:
+      security:
+        - BearerAuth: []
       operationId: getAllRestrictions
       summary: Get all published restrictions
       responses:
@@ -148,6 +149,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Restrictions'
     put:
+      security:
+        - BearerAuth: []
       operationId: updateRestriction
       summary: updates a restriction
       requestBody:
@@ -156,8 +159,28 @@ paths:
             schema:
               $ref: '#/components/schemas/Restriction'
       responses:
-        '200':
+        '204':
           description: successfully updated Restriction
+  /admin/additionalInformation:
+    post:
+      security:
+        - BearerAuth: []
+      operationId: addAdditionalInformationToCategory
+      parameters:
+        - in: path
+          name: category
+          schema:
+            type: string
+          required: true
+          example: 'Bayern'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdditionalInformation'
+      responses:
+        '200':
+          description: successfully added additional information
   /subscriptions:
     post:
       operationId: addSubscription
@@ -167,7 +190,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Subscription'
       responses:
-        '200':
+        '204':
           description: successfully added additional information
     get:
       operationId: getAllSubscriptions
@@ -188,7 +211,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Subscription'
       responses:
-        '200':
+        '204':
           description: successfully deleted Subscription
 
   /subscriptions/{areal}/{arealIdentifier}:
@@ -299,6 +322,17 @@ components:
         - COUNTY
         - STATE
         - COUNTRY
+    Credentials:
+      type: object
+      description: 'user credentials for login'
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
 
     RestrictionType:
       description: 'A restriction can affect one of these  areas of public life'
@@ -377,4 +411,8 @@ components:
       in: header
       name: 'API-KEY'
       description: 'Api-Key needed to authenticate requests'
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 

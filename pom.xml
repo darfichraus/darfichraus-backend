@@ -154,6 +154,7 @@
                                 <skipDefaultInterface>true</skipDefaultInterface>
                                 <interfaceOnly>true</interfaceOnly>
                                 <generatePom>false</generatePom>
+                                <import-mappings>Credentials=de.darfichraus.entity.Credentials</import-mappings>
                             </configOptions>
                         </configuration>
                     </execution>

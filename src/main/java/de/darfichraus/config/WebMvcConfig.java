@@ -1,5 +1,6 @@
 package de.darfichraus.config;
 
+import org.pac4j.core.authorization.authorizer.DefaultAuthorizers;
 import org.pac4j.core.config.Config;
 import org.pac4j.springframework.web.SecurityInterceptor;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,6 +30,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SecurityInterceptor(config, "HeaderClient ")).addPathPatterns("/admin/*");
+        registry.addInterceptor(new SecurityInterceptor(config, "DirectBearerAuthClient", DefaultAuthorizers.IS_FULLY_AUTHENTICATED)).addPathPatterns("/admin/*");
     }
 }

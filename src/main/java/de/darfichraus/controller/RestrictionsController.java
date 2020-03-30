@@ -28,7 +28,7 @@ public class RestrictionsController implements RestrictionsApi {
     @Override
     public ResponseEntity<Void> addRestriction(@Valid Restriction restriction) {
         restrictionService.save(restriction);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
