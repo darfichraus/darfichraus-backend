@@ -30,7 +30,7 @@ spec:
                   key: salt
           volumeMounts:
             - name: app-data
-              mountPath: "/etc/appData.properties"
+              mountPath: "/etc/appData"
               readOnly: true
       imagePullSecrets:
         - name: docker-hub-crimsy

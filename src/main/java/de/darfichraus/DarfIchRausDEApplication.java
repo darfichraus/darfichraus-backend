@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
         HibernateJpaAutoConfiguration.class
 })
 @EnableMongoAuditing
-@PropertySource(value = "/etc/appData.properties", ignoreResourceNotFound = true)
+@PropertySource(value = "/etc/appData/appData.properties", ignoreResourceNotFound = true)
 public class DarfIchRausDEApplication implements CommandLineRunner {
 
 
