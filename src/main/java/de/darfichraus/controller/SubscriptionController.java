@@ -1,9 +1,9 @@
 package de.darfichraus.controller;
 
+import de.darfichraus.api.SubscriptionsApi;
+import de.darfichraus.model.Areal;
+import de.darfichraus.model.Subscription;
 import de.darfichraus.service.SubscriptionService;
-import de.wirvsvirus.darfichrausde.api.SubscriptionsApi;
-import de.wirvsvirus.darfichrausde.model.Areal;
-import de.wirvsvirus.darfichrausde.model.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +22,10 @@ public class SubscriptionController implements SubscriptionsApi {
         this.subscriptionService = subscriptionService;
     }
 
-
     @Override
     public ResponseEntity<Void> addSubscription(@Valid Subscription subscription) {
         subscriptionService.save(subscription);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override

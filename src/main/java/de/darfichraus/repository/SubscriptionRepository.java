@@ -1,8 +1,8 @@
 package de.darfichraus.repository;
 
 
-import de.wirvsvirus.darfichrausde.model.Areal;
-import de.wirvsvirus.darfichrausde.model.Subscription;
+import de.darfichraus.model.Areal;
+import de.darfichraus.model.Subscription;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

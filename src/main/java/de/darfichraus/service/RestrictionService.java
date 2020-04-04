@@ -1,11 +1,11 @@
 package de.darfichraus.service;
 
 import de.darfichraus.entity.Mapping;
+import de.darfichraus.model.Areal;
+import de.darfichraus.model.Restriction;
+import de.darfichraus.model.RestrictionState;
+import de.darfichraus.model.RestrictionType;
 import de.darfichraus.repository.RestrictionRepository;
-import de.wirvsvirus.darfichrausde.model.Areal;
-import de.wirvsvirus.darfichrausde.model.Restriction;
-import de.wirvsvirus.darfichrausde.model.RestrictionState;
-import de.wirvsvirus.darfichrausde.model.RestrictionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -81,8 +81,6 @@ public class RestrictionService {
             throw new IllegalArgumentException("RestrictionStart must be before or equal to RestrictionEnd");
         }
         restriction.setVerified(false);
-        restriction.setCreated(LocalDate.now());
-        restriction.setModified(LocalDate.now());
         this.restrictionRepository.save(restriction);
     }
 
@@ -91,7 +89,6 @@ public class RestrictionService {
         if (restriction.getRestrictionStart().isAfter(restriction.getRestrictionEnd())) {
             throw new IllegalArgumentException("RestrictionStart must be before or equal to RestrictionEnd");
         }
-        restriction.setModified(LocalDate.now());
         this.restrictionRepository.save(restriction);
     }
 

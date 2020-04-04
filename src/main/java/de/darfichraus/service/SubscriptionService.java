@@ -1,17 +1,17 @@
 package de.darfichraus.service;
 
 import de.darfichraus.entity.Mapping;
+import de.darfichraus.model.Subscription;
 import de.darfichraus.repository.SubscriptionRepository;
-import de.wirvsvirus.darfichrausde.model.Areal;
-import de.wirvsvirus.darfichrausde.model.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static de.darfichraus.model.Areal.*;
 
 
 @Service
@@ -28,7 +28,6 @@ public class SubscriptionService {
 
 
     public void save(Subscription subscription) {
-        subscription.setCreated(LocalDate.now());
         subscriptionRepository.save(subscription);
     }
 
@@ -36,7 +35,7 @@ public class SubscriptionService {
         return subscriptionRepository.findAll();
     }
 
-    public List<Subscription> getSubscriptionsByArealAndArealIdentifier(Areal areal, String arealIdentifier) {
+    public List<Subscription> getSubscriptionsByArealAndArealIdentifier(de.darfichraus.model.Areal areal, String arealIdentifier) {
         List<Subscription> subscriptions = new ArrayList<>();
         Optional<Mapping> possibleMapping = mappingService.getMappingForAreal(areal, arealIdentifier);
         if (!possibleMapping.isPresent()) {
@@ -45,13 +44,13 @@ public class SubscriptionService {
         final Mapping mapping = possibleMapping.get();
         switch (areal) {
             case ZIP:
-                subscriptions.addAll(this.subscriptionRepository.findAllByArealAndArealIdentifier(Areal.ZIP, mapping.getZip()));
+                subscriptions.addAll(this.subscriptionRepository.findAllByArealAndArealIdentifier(ZIP, mapping.getZip()));
             case COUNTY:
-                subscriptions.addAll(this.subscriptionRepository.findAllByArealAndArealIdentifier(Areal.COUNTY, mapping.getCounty()));
+                subscriptions.addAll(this.subscriptionRepository.findAllByArealAndArealIdentifier(COUNTY, mapping.getCounty()));
             case STATE:
-                subscriptions.addAll(this.subscriptionRepository.findAllByArealAndArealIdentifier(Areal.STATE, mapping.getState()));
+                subscriptions.addAll(this.subscriptionRepository.findAllByArealAndArealIdentifier(STATE, mapping.getState()));
             case COUNTRY:
-                subscriptions.addAll(this.subscriptionRepository.findAllByArealAndArealIdentifier(Areal.COUNTRY, mapping.getCountry()));
+                subscriptions.addAll(this.subscriptionRepository.findAllByArealAndArealIdentifier(COUNTRY, mapping.getCountry()));
                 break;
             default:
                 return new ArrayList<>();

@@ -1,8 +1,8 @@
 package de.darfichraus.service;
 
 import de.darfichraus.entity.Mapping;
+import de.darfichraus.model.Areal;
 import de.darfichraus.repository.MappingRepository;
-import de.wirvsvirus.darfichrausde.model.Areal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -23,15 +23,6 @@ public class MappingService {
         if (StringUtils.isEmpty(arealIdentifier)) {
             return Optional.empty();
         }
-        if (Areal.ZIP.equals(areal)) {
-            return mappingRepository.findFirstByZip(arealIdentifier);
-        } else if (Areal.COUNTY.equals(areal)) {
-            return mappingRepository.findFirstByCounty(arealIdentifier);
-        } else if (Areal.STATE.equals(areal)) {
-            return mappingRepository.findFirstByState(arealIdentifier);
-        } else if (Areal.COUNTRY.equals(areal)) {
-            return mappingRepository.findFirstByCountry(arealIdentifier);
-        }
-        return Optional.empty();
+        return mappingRepository.findAllByArealAndArealIdentifier(areal.toString().toLowerCase(), arealIdentifier).findFirst();
     }
 }

@@ -1,8 +1,8 @@
 package de.darfichraus.controller;
 
+import de.darfichraus.api.AdditionalInformationApi;
+import de.darfichraus.model.AdditionalInformationCategory;
 import de.darfichraus.service.AdditionalInformationService;
-import de.wirvsvirus.darfichrausde.api.AdditionalInformationApi;
-import de.wirvsvirus.darfichrausde.model.AdditionalInformationCategory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 

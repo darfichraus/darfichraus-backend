@@ -2,18 +2,14 @@ package de.darfichraus.repository;
 
 import de.darfichraus.entity.Mapping;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.stream.Stream;
 
 @Repository
 public interface MappingRepository extends MongoRepository<Mapping, String> {
-    Optional<Mapping> findFirstByZip(final String zip);
+    @Query(value = "{?0 : ?1}")
+    Stream<Mapping> findAllByArealAndArealIdentifier(String areal, String arealIdentifier);
 
-    Optional<Mapping> findFirstByCounty(final String county);
-
-    Optional<Mapping> findFirstByState(final String state);
-
-    Optional<Mapping> findFirstByCountry(final String country);
 }

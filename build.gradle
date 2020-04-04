@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'org.springframework.boot' version '2.2.5.RELEASE'
+    id "org.openapi.generator" version "4.3.0"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter:2.2.5.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.2.5.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb:2.2.5.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.2.5.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.2.5.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.2.5.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-mail:2.2.5.RELEASE'
+    implementation 'com.google.guava:guava:28.2-jre'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor:2.2.5.RELEASE'
+    implementation 'io.swagger:swagger-annotations:1.5.12'
+    implementation 'javax.xml.bind:jaxb-api:2.2.11'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.2'
+    implementation 'org.openapitools:jackson-databind-nullable:0.1.0'
+    implementation 'org.pac4j:spring-webmvc-pac4j:4.0.0-RC3'
+    implementation 'org.pac4j:spring-security-pac4j:5.0.0-SNAPSHOT'
+    implementation 'org.pac4j:pac4j-http:4.0.0-RC3'
+    implementation 'org.pac4j:pac4j-jwt:4.0.0-RC3'
+    implementation 'org.pac4j:pac4j-mongo:4.0.0-RC3'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.2.5.RELEASE'
+}
+
+group = 'de.darfichraus'
+version = '0.0.1-SNAPSHOT'
+description = 'DarfIchRaus-API'
+sourceCompatibility = '1.8'
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+compileJava.dependsOn tasks.openApiGenerate
+
+
+def generatedBuildDir = "$buildDir/generated".toString()
+openApiGenerate {
+    skipOverwrite = true
+    generatorName = "spring"
+    inputSpec = "$rootDir/src/main/resources/api.yaml".toString()
+    outputDir = generatedBuildDir
+    apiPackage = "de.darfichraus.api"
+    modelPackage = "de.darfichraus.model"
+    configOptions = [
+            dateLibrary         : "java8",
+            java8               : "true",
+            sourceFolder        : "src/gen/java/main",
+            library             : "spring-mvc",
+            skipDefaultInterface: "true",
+            interfaceOnly       : "true",
+            generatePom         : "false"
+    ]
+    importMappings = [
+            Credentials               : "de.darfichraus.dto.Credentials",
+            BaseEntity                : "de.darfichraus.entity.BaseEntity",
+            "java.time.OffsetDateTime": "java.time.Instant",
+            User                      : "org.pac4j.mongo.profile.MongoProfile",
+    ]
+    typeMappings = [
+            OffsetDateTime: "Instant",
+    ]
+}
+sourceSets.main.java.srcDir new File(generatedBuildDir, 'src/gen/java')
+idea {
+    module {
+        generatedSourceDirs += file(generatedBuildDir + 'src/gen/java')
+    }
+}

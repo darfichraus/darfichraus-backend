@@ -1,4 +1,4 @@
-package de.darfichraus.entity;
+package de.darfichraus.dto;
 
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
 

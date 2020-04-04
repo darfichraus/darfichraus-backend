@@ -1,11 +1,11 @@
 package de.darfichraus.controller;
 
+import de.darfichraus.api.RestrictionsApi;
+import de.darfichraus.model.Areal;
+import de.darfichraus.model.Restriction;
+import de.darfichraus.model.RestrictionState;
+import de.darfichraus.model.RestrictionType;
 import de.darfichraus.service.RestrictionService;
-import de.wirvsvirus.darfichrausde.api.RestrictionsApi;
-import de.wirvsvirus.darfichrausde.model.Areal;
-import de.wirvsvirus.darfichrausde.model.Restriction;
-import de.wirvsvirus.darfichrausde.model.RestrictionState;
-import de.wirvsvirus.darfichrausde.model.RestrictionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

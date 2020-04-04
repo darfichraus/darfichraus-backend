@@ -28,8 +28,17 @@ spec:
                 secretKeyRef:
                   name: backend-salzig
                   key: salt
+          volumeMounts:
+            - name: app-data
+              mountPath: "/etc/appData.properties"
+              readOnly: true
+
       imagePullSecrets:
         - name: docker-hub-crimsy
+      volumes:
+        - name: app-data
+          secret:
+            secretName: app-data
 ---
 apiVersion: v1
 kind: Service

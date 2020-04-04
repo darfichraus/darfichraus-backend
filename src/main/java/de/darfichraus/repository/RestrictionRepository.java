@@ -1,10 +1,10 @@
 package de.darfichraus.repository;
 
 
-import de.wirvsvirus.darfichrausde.model.Areal;
-import de.wirvsvirus.darfichrausde.model.Restriction;
-import de.wirvsvirus.darfichrausde.model.RestrictionState;
-import de.wirvsvirus.darfichrausde.model.RestrictionType;
+import de.darfichraus.model.Areal;
+import de.darfichraus.model.Restriction;
+import de.darfichraus.model.RestrictionState;
+import de.darfichraus.model.RestrictionType;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
