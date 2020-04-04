@@ -15,7 +15,10 @@ spec:
     spec:
       containers:
         - name: backend
-          image: crimsy/sb-backend
+          image: crimsy/sb-backend:70519073
+          ports:
+            - containerPort: 8082
+              name: service-port
           imagePullPolicy: Always
           env:
             - name: API_KEY
@@ -32,6 +35,18 @@ spec:
             - name: app-data
               mountPath: "/etc/appData"
               readOnly: true
+          livenessProbe:
+            httpGet:
+              port: service-port
+              path: actuator/info
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: service-port
+              path: actuator/health
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
 
       imagePullSecrets:
         - name: docker-hub-crimsy
@@ -80,3 +95,54 @@ spec:
             backend:
               serviceName: backend
               servicePort: 8082
+          - path: /specs
+            backend:
+              serviceName: swagger-ui
+              servicePort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: swagger-ui
+  namespace: development
+  labels:
+    app: swagger-ui
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: swagger-ui
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swagger-ui
+  namespace: development
+  labels:
+    app: swagger-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swagger-ui
+  template:
+    metadata:
+      labels:
+        app: swagger-ui
+    spec:
+      containers:
+        - name: swagger-ui
+          image: swaggerapi/swagger-ui
+          ports:
+            - containerPort: 8080
+          env:
+            - name: BASE_URL
+              value: /specs
+            - name: API_URLS
+              value: >-
+                [
+                {url:'https://gist.githubusercontent.com/BSchneppe/834c93bec6618963257a781f4c35f4c9/raw/0a2bdc2878d2030a83040fe97c4cde5e7de22a3f/openapi.yaml',name:'DEV API'}
+                ]
