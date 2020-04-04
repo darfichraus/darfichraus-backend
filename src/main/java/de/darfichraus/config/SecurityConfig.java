@@ -26,7 +26,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(ImmutableList.of("HEAD",
                 "GET", "POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(ImmutableList.of("API-KEY", "responsetype", "Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowedHeaders(ImmutableList.of("API-KEY", "Authorization", "Cache-Control", "Content-Type"));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
