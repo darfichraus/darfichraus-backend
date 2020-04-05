@@ -143,7 +143,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/static/api.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <apiPackage>de.wirvsvirus.darfichrausde.api</apiPackage>
                             <modelPackage>de.wirvsvirus.darfichrausde.model</modelPackage>
