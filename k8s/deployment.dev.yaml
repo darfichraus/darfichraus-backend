@@ -144,5 +144,6 @@ spec:
             - name: API_URLS
               value: >-
                 [
-                {url:'https://gist.githubusercontent.com/BSchneppe/834c93bec6618963257a781f4c35f4c9/raw/0a2bdc2878d2030a83040fe97c4cde5e7de22a3f/openapi.yaml',name:'DEV API'}
+                {url:'https://api.dev.crimsy.tech/openapi.yaml',name:'DEV API'},
+                {url:'https://api.darfichraus.de/openapi.yaml',name:'PROD API'}
                 ]
