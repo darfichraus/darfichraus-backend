@@ -51,7 +51,7 @@ def generatedBuildDir = "$buildDir/generated".toString()
 openApiGenerate {
     skipOverwrite = true
     generatorName = "spring"
-    inputSpec = "$rootDir/src/main/resources/api.yaml".toString()
+    inputSpec = "$rootDir/src/main/resources/static/api.yaml".toString()
     outputDir = generatedBuildDir
     apiPackage = "de.darfichraus.api"
     modelPackage = "de.darfichraus.model"
