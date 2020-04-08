@@ -1,9 +1,10 @@
 package de.darfichraus.service;
 
-import de.darfichraus.config.Pac4JConfig;
 import de.darfichraus.dto.Credentials;
+import de.darfichraus.entity.Users;
 import de.darfichraus.model.CredentialsWithRoles;
 import de.darfichraus.model.Role;
+import de.darfichraus.repository.UserRepository;
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
 import org.pac4j.core.exception.CredentialsException;
 import org.pac4j.core.profile.CommonProfile;
@@ -12,6 +13,8 @@ import org.pac4j.core.util.Pac4jConstants;
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
 import org.pac4j.jwt.profile.JwtGenerator;
 import org.pac4j.mongo.profile.MongoProfile;
+import org.pac4j.mongo.profile.service.MongoProfileService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -23,13 +26,15 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    final Pac4JConfig.MongoProfileServiceWithReadAccess mongoProfileService;
+    final MongoProfileService mongoProfileService;
     final SecretSignatureConfiguration secretSignatureConfiguration;
     final ProfileManager profileManager;
     final MailService mailService;
+    final UserRepository userRepository;
 
-    public UserService(Pac4JConfig.MongoProfileServiceWithReadAccess mongoProfileService, SecretSignatureConfiguration secretSignatureConfiguration, ProfileManager profileManager, MailService mailService) {
+    public UserService(MongoProfileService mongoProfileService, UserRepository userRepository, SecretSignatureConfiguration secretSignatureConfiguration, ProfileManager profileManager, MailService mailService) {
         this.mongoProfileService = mongoProfileService;
+        this.userRepository = userRepository;
         this.secretSignatureConfiguration = secretSignatureConfiguration;
         this.profileManager = profileManager;
         this.mailService = mailService;
@@ -75,9 +80,22 @@ public class UserService {
         mongoProfileService.update(userProfile, credentials.getPassword());
     }
 
+    public void changeUser(MongoProfile mongoProfile) {
+        final Users user = userRepository.findByUsernameEquals(mongoProfile.getId());
+        if (user == null) {
+            throw new IllegalArgumentException("there was no existing profile found");
+        }
+        MongoProfile profileInDb = user.getMongoProfile();
+        BeanUtils.copyProperties(mongoProfile, profileInDb, "linkedid");
+        user.setMongoProfile(profileInDb);
+        userRepository.save(user);
+    }
 
     public List<MongoProfile> getProfiles() {
-        return mongoProfileService.getUserProfiles();
+        List<Users> allUsers = userRepository.findAll();
+        return allUsers.stream()
+                .map(Users::getMongoProfile)
+                .collect(Collectors.toList());
     }
 
     public void delete(String username) {

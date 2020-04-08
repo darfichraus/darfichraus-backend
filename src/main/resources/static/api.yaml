@@ -173,6 +173,41 @@ paths:
       responses:
         '200':
           description: successfully added additional information
+  /admin/subscriptions/{areal}/{arealIdentifier}:
+    get:
+      operationId: getSubscriptionsByArealAndArealIdentifier
+      summary: Get subscriptions for specific areal and arealIdentifier
+      parameters:
+        - in: path
+          name: areal
+          schema:
+            $ref: '#/components/schemas/Areal'
+          required: true
+          example: 'STATE'
+        - in: path
+          name: arealIdentifier
+          schema:
+            type: string
+          required: true
+          example: 'Bayern'
+      responses:
+        '200':
+          description: Subscriptions for given areal and arealIdentifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriptions'
+  /admin/subscriptions:
+    get:
+      operationId: getAllSubscriptions
+      summary: Get all subscriptions
+      responses:
+        '200':
+          description: List of all restrictions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriptions'
   /admin/users:
     get:
       security:
@@ -200,6 +235,7 @@ paths:
           name: email
           schema:
             type: string
+            format: email
           required: true
           example: 'te@st.de'
       responses:
@@ -233,6 +269,20 @@ paths:
       responses:
         '204':
           description: successfully added user
+  /admin/users/editUser:
+    post:
+      security:
+        - BearerAuth: []
+      operationId: editUser
+      summary: edits a user profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '204':
+          description: successfully added user
   /subscriptions:
     post:
       operationId: addSubscription
@@ -244,16 +294,6 @@ paths:
       responses:
         '204':
           description: successfully added additional information
-    get:
-      operationId: getAllSubscriptions
-      summary: Get all subscriptions
-      responses:
-        '200':
-          description: List of all restrictions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Subscriptions'
     delete:
       operationId: deleteSubscription
       summary: deletes a Subscription
@@ -265,31 +305,6 @@ paths:
       responses:
         '204':
           description: successfully deleted Subscription
-
-  /subscriptions/{areal}/{arealIdentifier}:
-    get:
-      operationId: getSubscriptionsByArealAndArealIdentifier
-      summary: Get subscriptions for specific areal and arealIdentifier
-      parameters:
-        - in: path
-          name: areal
-          schema:
-            $ref: '#/components/schemas/Areal'
-          required: true
-          example: 'STATE'
-        - in: path
-          name: arealIdentifier
-          schema:
-            type: string
-          required: true
-          example: 'Bayern'
-      responses:
-        '200':
-          description: Subscriptions for given areal and arealIdentifier
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Subscriptions'
 
 
 
@@ -394,8 +409,10 @@ components:
       properties:
         username:
           type: string
+          format: email
         password:
           type: string
+          format: password
     User:
       type: object
       description: 'user info object'
@@ -405,6 +422,7 @@ components:
       properties:
         username:
           type: string
+          format: email
         roles:
           type: array
           items:

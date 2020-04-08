@@ -72,7 +72,6 @@ public class SecurityConfig {
                     .addFilterBefore(securityFilter, BasicAuthenticationFilter.class)
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
 
-
         }
 
 
