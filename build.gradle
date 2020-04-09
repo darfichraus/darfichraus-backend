@@ -80,3 +80,7 @@ idea {
         generatedSourceDirs += file(generatedBuildDir + 'src/gen/java')
     }
 }
+
+test {
+    useJUnitPlatform()
+}

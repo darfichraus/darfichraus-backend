@@ -3,8 +3,6 @@ package de.darfichraus.controller;
 import de.darfichraus.api.RestrictionsApi;
 import de.darfichraus.model.Areal;
 import de.darfichraus.model.Restriction;
-import de.darfichraus.model.RestrictionState;
-import de.darfichraus.model.RestrictionType;
 import de.darfichraus.service.RestrictionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,12 +30,12 @@ public class RestrictionsController implements RestrictionsApi {
     }
 
     @Override
-    public ResponseEntity<List<Restriction>> getAllValidRestrictions(@Valid RestrictionType type) {
-        return ResponseEntity.ok(restrictionService.getRestrictions(type));
+    public ResponseEntity<List<Restriction>> getAllValidRestrictions() {
+        return ResponseEntity.ok(restrictionService.getAllValidRestrictions());
     }
 
     @Override
-    public ResponseEntity<List<Restriction>> getRestrictionsByArealAndArealIdentifier(Areal areal, String arealIdentifier, @Valid RestrictionState state) {
-        return ResponseEntity.ok(restrictionService.getRestrictions(areal, arealIdentifier, state));
+    public ResponseEntity<List<Restriction>> getRestrictionsByArealAndArealIdentifier(Areal areal, String arealIdentifier) {
+        return ResponseEntity.ok(restrictionService.getRestrictions(areal, arealIdentifier));
     }
 }

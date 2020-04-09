@@ -13,14 +13,7 @@ paths:
   /restrictions:
     get:
       operationId: getAllValidRestrictions
-      summary: Get all published restrictions possibly filtered by a RestrictionType
-      parameters:
-        - in: query
-          name: type
-          schema:
-            $ref: '#/components/schemas/RestrictionType'
-          required: false
-          example: 'PUBLIC_TRANSPORTATION'
+      summary: Get all published valid restrictions possibly
       responses:
         '200':
           description: List of all restrictions
@@ -56,12 +49,6 @@ paths:
             type: string
           required: true
           example: 'Bayern'
-        - in: query
-          name: state
-          schema:
-            $ref: '#/components/schemas/RestrictionState'
-          required: false
-          example: 'PUBLIC_TRANSPORTATION'
       responses:
         '200':
           description: Restrictions for given areal

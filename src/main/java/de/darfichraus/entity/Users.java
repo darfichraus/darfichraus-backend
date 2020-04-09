@@ -4,8 +4,6 @@ import org.pac4j.mongo.profile.MongoProfile;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 public class Users {
-
-
     private String id;
     @Field("id")
     private String userId;
