@@ -15,7 +15,10 @@ spec:
     spec:
       containers:
         - name: backend
-          image: crimsy/sb-backend
+          image: crimsy/sb-backend:production
+          ports:
+            - containerPort: 8082
+              name: service-port
           imagePullPolicy: Always
           env:
             - name: API_KEY
@@ -28,8 +31,28 @@ spec:
                 secretKeyRef:
                   name: backend-salzig
                   key: salt
+          volumeMounts:
+            - name: app-data
+              mountPath: "/etc/appData"
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              port: service-port
+              path: /actuator/info
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: service-port
+              path: /actuator/health
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
       imagePullSecrets:
         - name: docker-hub-crimsy
+      volumes:
+        - name: app-data
+          secret:
+            secretName: app-data
 ---
 apiVersion: v1
 kind: Service

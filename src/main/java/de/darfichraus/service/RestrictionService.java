@@ -1,17 +1,18 @@
 package de.darfichraus.service;
 
 import de.darfichraus.entity.Mapping;
+import de.darfichraus.model.Areal;
+import de.darfichraus.model.Restriction;
 import de.darfichraus.repository.RestrictionRepository;
-import de.wirvsvirus.darfichrausde.model.Areal;
-import de.wirvsvirus.darfichrausde.model.Restriction;
-import de.wirvsvirus.darfichrausde.model.RestrictionState;
-import de.wirvsvirus.darfichrausde.model.RestrictionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -28,38 +29,28 @@ public class RestrictionService {
     }
 
     // get all restrictions
-    public List<Restriction> getRestrictions(RestrictionType restrictionType) {
-        List<Restriction> restrictions;
-        if (restrictionType == null) {
-            restrictions = this.restrictionRepository.findAll();
-        } else {
-            restrictions = this.restrictionRepository.findAllByRestrictionType(restrictionType);
-        }
-        return sortAndFilterRestrictions(restrictions);
+    public List<Restriction> getAllValidRestrictions() {
+        return sortAndFilterRestrictions(this.restrictionRepository.findAll());
     }
 
     // get restrictions by areal and areal identifier
     // areal : zip, date, county, country
-    public List<Restriction> getRestrictions(final Areal areal, final String arealIdentifier, RestrictionState state) {
+    public List<Restriction> getRestrictions(final Areal areal, final String arealIdentifier) {
         List<Restriction> restrictions = new ArrayList<>();
         Optional<Mapping> possibleMapping = mappingService.getMappingForAreal(areal, arealIdentifier);
         if (!possibleMapping.isPresent()) {
             throw new IllegalArgumentException(MessageFormat.format("{0} was not found for {1}", arealIdentifier, areal));
         }
         final Mapping mapping = possibleMapping.get();
-        List<RestrictionState> restrictionStates = Collections.singletonList(state);
-        if (state == null) {
-            restrictionStates = Arrays.asList(RestrictionState.values());
-        }
         switch (areal) {
             case ZIP:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.ZIP, mapping.getZip(), restrictionStates));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.ZIP, mapping.getZip()));
             case COUNTY:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.COUNTY, mapping.getCounty(), restrictionStates));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.COUNTY, mapping.getCounty()));
             case STATE:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.STATE, mapping.getState(), restrictionStates));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.STATE, mapping.getState()));
             case COUNTRY:
-                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifierAndRestrictionStateIn(Areal.COUNTRY, mapping.getCountry(), restrictionStates));
+                restrictions.addAll(this.restrictionRepository.findAllByArealAndArealIdentifier(Areal.COUNTRY, mapping.getCountry()));
                 break;
             default:
                 return new ArrayList<>();
@@ -81,8 +72,6 @@ public class RestrictionService {
             throw new IllegalArgumentException("RestrictionStart must be before or equal to RestrictionEnd");
         }
         restriction.setVerified(false);
-        restriction.setCreated(LocalDate.now());
-        restriction.setModified(LocalDate.now());
         this.restrictionRepository.save(restriction);
     }
 
@@ -91,11 +80,9 @@ public class RestrictionService {
         if (restriction.getRestrictionStart().isAfter(restriction.getRestrictionEnd())) {
             throw new IllegalArgumentException("RestrictionStart must be before or equal to RestrictionEnd");
         }
-        restriction.setModified(LocalDate.now());
         this.restrictionRepository.save(restriction);
     }
 
-    // get single restriction
     public List<Restriction> getAllRestrictions() {
         return this.restrictionRepository.findAll();
     }

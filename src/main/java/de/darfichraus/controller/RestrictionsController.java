@@ -1,11 +1,9 @@
 package de.darfichraus.controller;
 
+import de.darfichraus.api.RestrictionsApi;
+import de.darfichraus.model.Areal;
+import de.darfichraus.model.Restriction;
 import de.darfichraus.service.RestrictionService;
-import de.wirvsvirus.darfichrausde.api.RestrictionsApi;
-import de.wirvsvirus.darfichrausde.model.Areal;
-import de.wirvsvirus.darfichrausde.model.Restriction;
-import de.wirvsvirus.darfichrausde.model.RestrictionState;
-import de.wirvsvirus.darfichrausde.model.RestrictionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,12 +30,12 @@ public class RestrictionsController implements RestrictionsApi {
     }
 
     @Override
-    public ResponseEntity<List<Restriction>> getAllValidRestrictions(@Valid RestrictionType type) {
-        return ResponseEntity.ok(restrictionService.getRestrictions(type));
+    public ResponseEntity<List<Restriction>> getAllValidRestrictions() {
+        return ResponseEntity.ok(restrictionService.getAllValidRestrictions());
     }
 
     @Override
-    public ResponseEntity<List<Restriction>> getRestrictionsByArealAndArealIdentifier(Areal areal, String arealIdentifier, @Valid RestrictionState state) {
-        return ResponseEntity.ok(restrictionService.getRestrictions(areal, arealIdentifier, state));
+    public ResponseEntity<List<Restriction>> getRestrictionsByArealAndArealIdentifier(Areal areal, String arealIdentifier) {
+        return ResponseEntity.ok(restrictionService.getRestrictions(areal, arealIdentifier));
     }
 }

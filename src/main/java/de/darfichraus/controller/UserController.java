@@ -1,11 +1,10 @@
 package de.darfichraus.controller;
 
-import de.darfichraus.entity.Credentials;
+import de.darfichraus.dto.Credentials;
 import de.darfichraus.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -18,9 +17,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/login",
-            consumes = {"application/json"},
-            method = RequestMethod.POST)
+    @PostMapping("/login")
     public ResponseEntity<String> authenticateUser(@Valid @RequestBody Credentials credentials) {
         return ResponseEntity.ok(userService.authenticateUser(credentials));
     }

@@ -1,7 +1,7 @@
 package de.darfichraus.service;
 
+import de.darfichraus.model.AdditionalInformationCategory;
 import de.darfichraus.repository.AdditionalInformationRepository;
-import de.wirvsvirus.darfichrausde.model.AdditionalInformationCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -13,14 +13,7 @@ paths:
   /restrictions:
     get:
       operationId: getAllValidRestrictions
-      summary: Get all published restrictions possibly filtered by a RestrictionType
-      parameters:
-        - in: query
-          name: type
-          schema:
-            $ref: '#/components/schemas/RestrictionType'
-          required: false
-          example: 'PUBLIC_TRANSPORTATION'
+      summary: Get all published valid restrictions possibly
       responses:
         '200':
           description: List of all restrictions
@@ -56,12 +49,6 @@ paths:
             type: string
           required: true
           example: 'Bayern'
-        - in: query
-          name: state
-          schema:
-            $ref: '#/components/schemas/RestrictionState'
-          required: false
-          example: 'PUBLIC_TRANSPORTATION'
       responses:
         '200':
           description: Restrictions for given areal
@@ -114,26 +101,10 @@ paths:
                 type: string
                 example: my-long-jwt-token
 
-  /admin/register:
-    post:
-      security:
-        - BearerAuth: []
-        - ApiKeyAuth: []
-      operationId: registerUser
-      summary: adds a user
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Credentials'
-      responses:
-        '204':
-          description: successfully deleted Restriction
   /admin/restrictions:
     delete:
       security:
         - BearerAuth: []
-        - ApiKeyAuth: []
       operationId: deleteRestriction
       summary: deletes a restriction
       requestBody:
@@ -147,7 +118,6 @@ paths:
     get:
       security:
         - BearerAuth: []
-        - ApiKeyAuth: []
       operationId: getAllRestrictions
       summary: Get all published restrictions
       responses:
@@ -160,7 +130,6 @@ paths:
     put:
       security:
         - BearerAuth: []
-        - ApiKeyAuth: []
       operationId: updateRestriction
       summary: updates a restriction
       requestBody:
@@ -175,7 +144,6 @@ paths:
     post:
       security:
         - BearerAuth: []
-        - ApiKeyAuth: []
       operationId: addAdditionalInformationToCategory
       parameters:
         - in: path
@@ -192,40 +160,7 @@ paths:
       responses:
         '200':
           description: successfully added additional information
-  /subscriptions:
-    post:
-      operationId: addSubscription
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Subscription'
-      responses:
-        '204':
-          description: successfully added additional information
-    get:
-      operationId: getAllSubscriptions
-      summary: Get all subscriptions
-      responses:
-        '200':
-          description: List of all restrictions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Subscriptions'
-    delete:
-      operationId: deleteSubscription
-      summary: deletes a Subscription
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Subscription'
-      responses:
-        '204':
-          description: successfully deleted Subscription
-
-  /subscriptions/{areal}/{arealIdentifier}:
+  /admin/subscriptions/{areal}/{arealIdentifier}:
     get:
       operationId: getSubscriptionsByArealAndArealIdentifier
       summary: Get subscriptions for specific areal and arealIdentifier
@@ -249,76 +184,176 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Subscriptions'
+  /admin/subscriptions:
+    get:
+      operationId: getAllSubscriptions
+      summary: Get all subscriptions
+      responses:
+        '200':
+          description: List of all restrictions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriptions'
+  /admin/users:
+    get:
+      security:
+        - BearerAuth: []
+      operationId: getProfiles
+      summary: gets all users
+      responses:
+        '200':
+          description: List of all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+
+  /admin/users/{email}:
+    delete:
+      security:
+        - BearerAuth: []
+      operationId: deleteUser
+      parameters:
+        - in: path
+          name: email
+          schema:
+            type: string
+            format: email
+          required: true
+          example: 'te@st.de'
+      responses:
+        '204':
+          description: successfully deleted user
+  /admin/users/passwordReset:
+    patch:
+      security:
+        - BearerAuth: []
+      operationId: changePassword
+      summary: change User password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '204':
+          description: successfully deleted user
+  /admin/users/register:
+    post:
+      security:
+        - BearerAuth: []
+      operationId: registerUser
+      summary: adds a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CredentialsWithRoles'
+      responses:
+        '204':
+          description: successfully added user
+  /admin/users/editUser:
+    post:
+      security:
+        - BearerAuth: []
+      operationId: editUser
+      summary: edits a user profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '204':
+          description: successfully added user
+  /subscriptions:
+    post:
+      operationId: addSubscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+      responses:
+        '204':
+          description: successfully added additional information
+    delete:
+      operationId: deleteSubscription
+      summary: deletes a Subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+      responses:
+        '204':
+          description: successfully deleted Subscription
 
 
 
 components:
   schemas:
     Restriction:
-      type: object
-      required:
-        - areal
-        - arealIdentifier
-        - restrictionState
-        - restrictionType
-        - restrictionStart
-        - restrictionEnd
-        - recipient
-        - publisher
-        - restrictionDescription
-        - shortDescription
-      properties:
-        id:
-          type: string
-        areal:
-          $ref: '#/components/schemas/Areal'
-        arealIdentifier:
-          type: string
-        restrictionType:
-          $ref: '#/components/schemas/RestrictionType'
-        restrictionState:
-          $ref: '#/components/schemas/RestrictionState'
-        shortDescription:
-          type: string
-          description: 'Give a short excerpt, why the restriction is active'
-          example: 'There are zombies everywhere'
-        restrictionDescription:
-          type: string
-          description: 'Full styled text to give a closer look to the restriction.'
-        restrictionStart:
-          type: string
-          format: date
-          description: 'Start of restriction'
-          example: '2020-03-21'
-        restrictionEnd:
-          type: string
-          format: date
-          description: 'End of restriction'
-          example: '2020-03-21'
-        recipient:
-          type: string
-          description: 'affected group of citizens'
-          example: 'Schüler'
-        publisher:
-          type: string
-          description: 'source of information'
-          example: 'Regierung'
-        furtherInformation:
-          type: string
-          description: 'Further information for snoopy people'
-          example: 'http://link/to/more/information'
-        verified:
-          type: boolean
-          description: 'whether this restriction has been verified yet'
-          default: false
-        created:
-          type: string
-          format: date
-          description: 'when this restriction has been created'
-        modified:
-          type: string
-          format: date
-          description: 'when this restriction has been updated'
+      allOf:
+        - $ref: '#/components/schemas/BaseEntity'
+        - type: object
+          required:
+            - areal
+            - arealIdentifier
+            - restrictionState
+            - restrictionType
+            - restrictionStart
+            - restrictionEnd
+            - recipient
+            - publisher
+            - restrictionDescription
+            - shortDescription
+          properties:
+            areal:
+              $ref: '#/components/schemas/Areal'
+            arealIdentifier:
+              type: string
+            restrictionType:
+              $ref: '#/components/schemas/RestrictionType'
+            restrictionState:
+              $ref: '#/components/schemas/RestrictionState'
+            shortDescription:
+              type: string
+              description: 'Give a short excerpt, why the restriction is active'
+              example: 'There are zombies everywhere'
+            restrictionDescription:
+              type: string
+              description: 'Full styled text to give a closer look to the restriction.'
+            restrictionStart:
+              type: string
+              format: date
+              description: 'Start of restriction'
+              example: '2020-03-21'
+            restrictionEnd:
+              type: string
+              format: date
+              description: 'End of restriction'
+              example: '2020-03-21'
+            recipient:
+              type: string
+              description: 'affected group of citizens'
+              example: 'Schüler'
+            publisher:
+              type: string
+              description: 'source of information'
+              example: 'Regierung'
+            furtherInformation:
+              type: string
+              description: 'Further information for snoopy people'
+              example: 'http://link/to/more/information'
+            verified:
+              type: boolean
+              description: 'whether this restriction has been verified yet'
+              default: false
 
     Restrictions:
       type: array
@@ -333,6 +368,25 @@ components:
         - COUNTY
         - STATE
         - COUNTRY
+    Role:
+      description: 'Roles used in the app'
+      type: string
+      enum:
+        - ROLE_ADMIN
+        - ROLE_COLLABORATOR
+        - ROLE_USER
+    CredentialsWithRoles:
+      allOf:
+        - $ref: '#/components/schemas/Credentials'
+        - type: object
+          required:
+            - roles
+          properties:
+            roles:
+              type: array
+              items:
+                $ref: '#/components/schemas/Role'
+
     Credentials:
       type: object
       description: 'user credentials for login'
@@ -342,8 +396,24 @@ components:
       properties:
         username:
           type: string
+          format: email
         password:
           type: string
+          format: password
+    User:
+      type: object
+      description: 'user info object'
+      required:
+        - username
+        - roles
+      properties:
+        username:
+          type: string
+          format: email
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
 
     RestrictionType:
       description: 'A restriction can affect one of these  areas of public life'
@@ -368,17 +438,17 @@ components:
         $ref: '#/components/schemas/AdditionalInformationCategory'
 
     AdditionalInformationCategory:
-      type: object
-      required:
-        - category
-        - additionalInformation
-      properties:
-        additionalInformation:
-          $ref: '#/components/schemas/AdditionalInformation'
-        category:
-          type: string
-        id:
-          type: string
+      allOf:
+        - $ref: '#/components/schemas/BaseEntity'
+        - type: object
+          required:
+            - category
+            - additionalInformation
+          properties:
+            additionalInformation:
+              $ref: '#/components/schemas/AdditionalInformation'
+            category:
+              type: string
 
     AdditionalInformation:
       type: object
@@ -391,31 +461,41 @@ components:
         $ref: '#/components/schemas/Subscription'
 
     Subscription:
+      allOf:
+        - $ref: '#/components/schemas/BaseEntity'
+        - type: object
+          required:
+            - email
+            - areal
+            - arealIdentifier
+            - contactAllowed
+          properties:
+            email:
+              type: string
+              example: 'a@b.com'
+            areal:
+              $ref: '#/components/schemas/Areal'
+            arealIdentifier:
+              type: string
+            types:
+              type: array
+              items:
+                $ref: '#/components/schemas/RestrictionType'
+    BaseEntity:
       type: object
-      required:
-        - email
-        - areal
-        - arealIdentifier
-        - contactAllowed
+      discriminator:
+        propertyName: Entity
       properties:
         id:
           type: string
-        email:
-          type: string
-          example: 'a@b.com'
-        areal:
-          $ref: '#/components/schemas/Areal'
-        arealIdentifier:
-          type: string
-        types:
-          type: array
-          items:
-            $ref: '#/components/schemas/RestrictionType'
         created:
           type: string
-          format: date
-          description: 'when this subscription has been created'
-
+          format: date-time
+          description: 'when this entity has been created'
+        modified:
+          type: string
+          format: date-time
+          description: 'when this entity has been last modified'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

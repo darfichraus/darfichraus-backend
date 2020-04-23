@@ -25,18 +25,18 @@ jobs:
           settings-path: ${{ github.workspace }}
       - uses: actions/cache@v1
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
-            ${{ runner.os }}-maven-
-      - name: Build with Maven
-        run: mvn -B -f pom.xml clean package -DskipTests
+            ${{ runner.os }}-gradle-
+      - name: Build with Gradle
+        run: ./gradlew build
       - name: Docker Login
         run: echo ${{secrets.DOCKER_PASSWORD}} | docker login -u ${{secrets.DOCKER_USERNAME}} --password-stdin
       - name: Build Docker image
-        run: docker build -t ${REPO}:${GITHUB_RUN_ID} .
+        run: docker build -t ${REPO}:${GITHUB_RUN_ID} -t ${REPO}:${NAMESPACE} .
       - name: Publish Docker image
-        run: docker push ${REPO}:${GITHUB_RUN_ID}
+        run: docker push ${REPO}:${GITHUB_RUN_ID} && docker push ${REPO}:${NAMESPACE}
   deploy:
     name: deploy to cluster
     needs: [docker]

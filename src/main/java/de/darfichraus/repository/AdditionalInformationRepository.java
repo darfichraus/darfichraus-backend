@@ -1,7 +1,7 @@
 package de.darfichraus.repository;
 
 
-import de.wirvsvirus.darfichrausde.model.AdditionalInformationCategory;
+import de.darfichraus.model.AdditionalInformationCategory;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

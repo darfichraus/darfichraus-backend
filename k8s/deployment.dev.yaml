@@ -15,7 +15,10 @@ spec:
     spec:
       containers:
         - name: backend
-          image: crimsy/sb-backend
+          image: crimsy/sb-backend:development
+          ports:
+            - containerPort: 8082
+              name: service-port
           imagePullPolicy: Always
           env:
             - name: API_KEY
@@ -28,8 +31,29 @@ spec:
                 secretKeyRef:
                   name: backend-salzig
                   key: salt
+          volumeMounts:
+            - name: app-data
+              mountPath: "/etc/appData"
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              port: service-port
+              path: actuator/info
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: service-port
+              path: actuator/health
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
+
       imagePullSecrets:
         - name: docker-hub-crimsy
+      volumes:
+        - name: app-data
+          secret:
+            secretName: app-data
 ---
 apiVersion: v1
 kind: Service
@@ -71,3 +95,55 @@ spec:
             backend:
               serviceName: backend
               servicePort: 8082
+          - path: /specs
+            backend:
+              serviceName: swagger-ui
+              servicePort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: swagger-ui
+  namespace: development
+  labels:
+    app: swagger-ui
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: swagger-ui
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swagger-ui
+  namespace: development
+  labels:
+    app: swagger-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swagger-ui
+  template:
+    metadata:
+      labels:
+        app: swagger-ui
+    spec:
+      containers:
+        - name: swagger-ui
+          image: swaggerapi/swagger-ui
+          ports:
+            - containerPort: 8080
+          env:
+            - name: BASE_URL
+              value: /specs
+            - name: API_URLS
+              value: >-
+                [
+                {url:'https://api.dev.crimsy.tech/openapi.yaml',name:'DEV API'},
+                {url:'https://api.darfichraus.de/openapi.yaml',name:'PROD API'}
+                ]
