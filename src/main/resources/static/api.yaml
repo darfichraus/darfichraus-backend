@@ -473,7 +473,7 @@ components:
       description: 'A restriction can affect one of these  areas of public life'
       type: string
       enum:
-        - GENERAL_INFORMATON
+        - GENERAL_INFORMATION
         - PUBLIC_TRANSPORTATION
         - EVENTS_AND_ASSEMBLIES
         - GASTRONOMY
