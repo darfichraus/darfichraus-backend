@@ -110,7 +110,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AdditionalInformationCategories'
-    /subscriptions:
+  /subscriptions:
     post:
       tags:
         - subscription
