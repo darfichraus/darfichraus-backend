@@ -9,9 +9,28 @@ servers:
     description: development instance
 security:
   - ApiKeyAuth: []
+tags:
+  - name: restrictions
+    description: Everything about a restriction
+  - name: restrictionsByAreal
+    description: Get restrictions by specific areal
+  - name: additionalInformation
+    description: further information for states, categories, etc.
+  - name: subscription
+    description: Allow users to subscripe (for notifications)
+  - name: login
+    description: Login
+  - name: admin
+    description: Everything you can change
+  - name: userManagement
+    description: Administrate user and user information
+  - name: manageSubscription
+    description: Manage subscriptions
 paths:
   /restrictions:
     get:
+      tags:
+        - restrictions
       operationId: getAllValidRestrictions
       summary: Get all published valid restrictions possibly
       responses:
@@ -22,6 +41,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Restrictions'
     post:
+      tags:
+        - restrictions
       operationId: addRestriction
       summary: adds a restriction
       requestBody:
@@ -34,6 +55,8 @@ paths:
           description: successfully added Restriction
   /restrictions/{areal}/{arealIdentifier}:
     get:
+      tags:
+        - restrictionsByAreal
       operationId: getRestrictionsByArealAndArealIdentifier
       summary: Get restrictions for specific areal and arealIdentifier possibly filtered by a RestrictionState
       parameters:
@@ -58,6 +81,8 @@ paths:
                 $ref: '#/components/schemas/Restrictions'
   /additionalInformation/{category}:
     get:
+      tags:
+        - additionalInformation
       operationId: getAdditionalInformationForCategory
       parameters:
         - in: path
@@ -75,6 +100,8 @@ paths:
                 $ref: '#/components/schemas/AdditionalInformationCategory'
   /additionalInformation:
     get:
+      tags:
+        - additionalInformation
       operationId: getAdditionalInformation
       responses:
         '200':
@@ -83,8 +110,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AdditionalInformationCategories'
+    /subscriptions:
+    post:
+      tags:
+        - subscription
+      operationId: addSubscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+      responses:
+        '204':
+          description: successfully added additional information
+    delete:
+      tags:
+        - subscription
+      operationId: deleteSubscription
+      summary: deletes a Subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+      responses:
+        '204':
+          description: successfully deleted Subscription
+          
   /login:
     post:
+      tags:
+        - login
       operationId: authenticateUser
       summary: get jwt token for credentials
       requestBody:
@@ -103,6 +159,8 @@ paths:
 
   /admin/restrictions:
     delete:
+      tags:
+        - admin
       security:
         - BearerAuth: []
       operationId: deleteRestriction
@@ -116,6 +174,8 @@ paths:
         '204':
           description: successfully deleted Restriction
     get:
+      tags:
+        - admin
       security:
         - BearerAuth: []
       operationId: getAllRestrictions
@@ -128,6 +188,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Restrictions'
     put:
+      tags:
+        - admin
       security:
         - BearerAuth: []
       operationId: updateRestriction
@@ -142,6 +204,8 @@ paths:
           description: successfully updated Restriction
   /admin/additionalInformation:
     post:
+      tags:
+        - admin
       security:
         - BearerAuth: []
       operationId: addAdditionalInformationToCategory
@@ -162,6 +226,8 @@ paths:
           description: successfully added additional information
   /admin/subscriptions/{areal}/{arealIdentifier}:
     get:
+      tags:
+        - admin
       operationId: getSubscriptionsByArealAndArealIdentifier
       summary: Get subscriptions for specific areal and arealIdentifier
       parameters:
@@ -186,6 +252,8 @@ paths:
                 $ref: '#/components/schemas/Subscriptions'
   /admin/subscriptions:
     get:
+      tags:
+        - manageSubscription
       operationId: getAllSubscriptions
       summary: Get all subscriptions
       responses:
@@ -197,6 +265,8 @@ paths:
                 $ref: '#/components/schemas/Subscriptions'
   /admin/users:
     get:
+      tags:
+        - userManagement
       security:
         - BearerAuth: []
       operationId: getProfiles
@@ -214,6 +284,8 @@ paths:
 
   /admin/users/{email}:
     delete:
+      tags:
+        - userManagement
       security:
         - BearerAuth: []
       operationId: deleteUser
@@ -230,6 +302,8 @@ paths:
           description: successfully deleted user
   /admin/users/passwordReset:
     patch:
+      tags:
+        - userManagement
       security:
         - BearerAuth: []
       operationId: changePassword
@@ -244,6 +318,8 @@ paths:
           description: successfully deleted user
   /admin/users/register:
     post:
+      tags:
+        - userManagement
       security:
         - BearerAuth: []
       operationId: registerUser
@@ -258,6 +334,8 @@ paths:
           description: successfully added user
   /admin/users/editUser:
     post:
+      tags:
+        - userManagement
       security:
         - BearerAuth: []
       operationId: editUser
@@ -270,30 +348,6 @@ paths:
       responses:
         '204':
           description: successfully added user
-  /subscriptions:
-    post:
-      operationId: addSubscription
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Subscription'
-      responses:
-        '204':
-          description: successfully added additional information
-    delete:
-      operationId: deleteSubscription
-      summary: deletes a Subscription
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Subscription'
-      responses:
-        '204':
-          description: successfully deleted Subscription
-
-
 
 components:
   schemas:
@@ -419,7 +473,7 @@ components:
       description: 'A restriction can affect one of these  areas of public life'
       type: string
       enum:
-        - GENERAL_INFORMATION
+        - GENERAL_INFORMATON
         - PUBLIC_TRANSPORTATION
         - EVENTS_AND_ASSEMBLIES
         - GASTRONOMY
@@ -507,4 +561,3 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
