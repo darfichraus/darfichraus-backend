@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class MappingService {
 
-    private MappingRepository mappingRepository;
+    private final MappingRepository mappingRepository;
 
     @Autowired
     public MappingService(MappingRepository mappingRepository) {
