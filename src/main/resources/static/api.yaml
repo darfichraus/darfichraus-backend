@@ -426,7 +426,7 @@ components:
               items:
                   type: string
               default:
-                - ""
+              - ""
             verified:
               type: boolean
               description: 'whether this restriction has been verified yet'
