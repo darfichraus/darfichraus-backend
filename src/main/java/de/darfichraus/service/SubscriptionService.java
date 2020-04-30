@@ -17,8 +17,8 @@ import static de.darfichraus.model.Areal.*;
 @Service
 public class SubscriptionService {
 
-    private SubscriptionRepository subscriptionRepository;
-    private MappingService mappingService;
+    private final SubscriptionRepository subscriptionRepository;
+    private final MappingService mappingService;
 
     @Autowired
     public SubscriptionService(final SubscriptionRepository subscriptionRepository, final MappingService mappingService) {

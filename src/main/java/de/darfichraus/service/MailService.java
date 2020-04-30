@@ -10,8 +10,12 @@ import java.text.MessageFormat;
 @Service
 public class MailService {
 
-    @Autowired
     JavaMailSender mailSender;
+
+    @Autowired
+    public MailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
     void sendCredentialsMail(final String email, final String password) {
         SimpleMailMessage message = new SimpleMailMessage();

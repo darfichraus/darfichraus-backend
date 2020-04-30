@@ -79,6 +79,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Restrictions'
+  /restrictions/{id}:
+    get:
+      operationId: getRestrictionById
+      summary: Get restrictions for specific id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Restrictions for given areal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restriction'
   /additionalInformation/{category}:
     get:
       tags:
@@ -404,10 +421,21 @@ components:
               type: string
               description: 'Further information for snoopy people'
               example: 'http://link/to/more/information'
+            tags:
+              type: array
+              items:
+                  type: string
+              default:
+                - ""
             verified:
               type: boolean
               description: 'whether this restriction has been verified yet'
               default: false
+            insertedBy:
+              type: string
+              description: 'What system (could also be a User) added this information'
+              default: 'unknown'
+              example: 'feed-analyser'
 
     Restrictions:
       type: array
@@ -480,6 +508,13 @@ components:
         - PUBLIC_PLACES
         - RETAIL
         - CURFEW
+        - UNCLASSIFIED
+
+    RestrictionTypes:
+      description: 'A list of RestrictionType'
+      type: array
+      items:
+        $ref: '#/components/schemas/RestrictionType'
 
     RestrictionState:
       description: 'Describes severeness of restriction'
@@ -487,6 +522,10 @@ components:
       enum:
         - BAN
         - RESTRICTION
+        - ADVISE
+        - WARNING
+        - INFORMATION
+
     AdditionalInformationCategories:
       type: array
       items:
