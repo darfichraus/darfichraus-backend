@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
@@ -18,7 +17,6 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
         HibernateJpaAutoConfiguration.class
 })
 @EnableMongoAuditing
-@EnableCaching
 @PropertySource(value = "file:/etc/appData/appData.properties", ignoreResourceNotFound = true)
 public class DarfIchRausDEApplication implements CommandLineRunner {
 
