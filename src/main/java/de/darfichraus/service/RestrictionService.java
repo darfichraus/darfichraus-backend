@@ -7,20 +7,18 @@ import de.darfichraus.repository.RestrictionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.text.MessageFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
 @Service
 public class RestrictionService {
 
-    private RestrictionRepository restrictionRepository;
-    private MappingService mappingService;
+    private final RestrictionRepository restrictionRepository;
+    private final MappingService mappingService;
 
     @Autowired
     public RestrictionService(final RestrictionRepository restrictionRepository, final MappingService mappingService) {
@@ -60,8 +58,27 @@ public class RestrictionService {
     }
 
     private List<Restriction> sortAndFilterRestrictions(List<Restriction> restrictions) {
-        return restrictions.stream().filter(restriction -> !restriction.getRestrictionEnd().isBefore(LocalDate.now()))
+
+        final int maxWords = 20;
+        return restrictions.stream()
+                .filter(restriction -> !restriction.getRestrictionEnd().isBefore(LocalDate.now()))
                 .filter(Restriction::getVerified)
+                .peek(
+                        element -> {
+                            if (element.getRestrictionDescription() == null || element.getRestrictionDescription().isEmpty()) {
+                                return;
+                            }
+
+                            int copyRange = maxWords;
+                            String[] textAsList = element.getRestrictionDescription().split(" ");
+                            String addEllipsisMarker = " [EOT]";
+                            if (textAsList.length < copyRange) {
+                                copyRange = textAsList.length;
+                                addEllipsisMarker = "";
+                            }
+                            element.setRestrictionDescription(String.join(" ", Arrays.copyOfRange(textAsList, 0, copyRange)) + addEllipsisMarker);
+                        }
+                )
                 .sorted(Comparator.comparing(Restriction::getRestrictionStart).reversed())
                 .collect(Collectors.toList());
     }
@@ -94,5 +111,9 @@ public class RestrictionService {
         }
         this.restrictionRepository.delete(restriction);
         return true;
+    }
+
+    public Restriction getRestrictionById(String id) {
+        return this.restrictionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
     }
 }

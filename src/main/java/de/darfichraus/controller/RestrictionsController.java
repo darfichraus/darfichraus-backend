@@ -35,7 +35,13 @@ public class RestrictionsController implements RestrictionsApi {
     }
 
     @Override
+    public ResponseEntity<Restriction> getRestrictionById(String id) {
+        return ResponseEntity.ok(restrictionService.getRestrictionById(id));
+    }
+
+    @Override
     public ResponseEntity<List<Restriction>> getRestrictionsByArealAndArealIdentifier(Areal areal, String arealIdentifier) {
         return ResponseEntity.ok(restrictionService.getRestrictions(areal, arealIdentifier));
     }
+
 }
