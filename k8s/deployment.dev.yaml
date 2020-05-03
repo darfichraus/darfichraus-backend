@@ -19,6 +19,8 @@ spec:
           ports:
             - containerPort: 8082
               name: service-port
+            - containerPort: 1997
+              name: jvm-debug
           imagePullPolicy: Always
           env:
             - name: API_KEY
@@ -138,12 +140,13 @@ spec:
           image: swaggerapi/swagger-ui
           ports:
             - containerPort: 8080
+              name: "web"
           env:
             - name: BASE_URL
               value: /specs
             - name: API_URLS
               value: >-
                 [
-                {url:'https://api.dev.crimsy.tech/openapi.yaml',name:'DEV API'},
-                {url:'https://api.darfichraus.de/openapi.yaml',name:'PROD API'}
+                {url:'https://api.dev.crimsy.tech/api.yaml',name:'DEV API'},
+                {url:'https://api.darfichraus.de/api.yaml',name:'PROD API'}
                 ]
