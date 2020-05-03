@@ -19,6 +19,8 @@ spec:
           ports:
             - containerPort: 8082
               name: service-port
+            - containerPort: 1997
+              name: jvm-debug
           imagePullPolicy: Always
           env:
             - name: API_KEY
@@ -138,6 +140,7 @@ spec:
           image: swaggerapi/swagger-ui
           ports:
             - containerPort: 8080
+              name: "web"
           env:
             - name: BASE_URL
               value: /specs
