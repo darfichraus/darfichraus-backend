@@ -26,6 +26,27 @@ tags:
     description: Administrate user and user information
   - name: manageSubscription
     description: Manage subscriptions
+  - name: situationTypes
+    description: Manage the Situation Type(s)
+  - name: situationType
+    description: Manage specific Situation Type
+  - name: situations
+    description: Manage all situations
+  - name: situation
+    description: Manage specific situation
+  - name: situationMessageTypes
+    description: Manage all Situation Message Types
+  - name: situationMessageType
+    description: Manage specific SituationMessage Types
+  - name: situationMessages
+    description: Manage all Situation Message
+  - name: situationMessage
+    description: Manage specific Sitauation Message
+  - name: situationReferences
+    description: Manage all Situation References
+  - name: situationReference
+    description: Manage specific SituationReference
+
 paths:
   /restrictions:
     get:
@@ -53,6 +74,25 @@ paths:
       responses:
         '204':
           description: successfully added Restriction
+  /restrictions/{id}:
+    get:
+      tags:
+        - restrictions
+      operationId: getRestrictionById
+      summary: Get restrictions for specific id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Restrictions for given areal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restriction'
   /restrictions/{areal}/{arealIdentifier}:
     get:
       tags:
@@ -79,23 +119,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Restrictions'
-  /restrictions/{id}:
-    get:
-      operationId: getRestrictionById
-      summary: Get restrictions for specific id
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
-      responses:
-        '200':
-          description: Restrictions for given areal
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Restriction'
   /additionalInformation/{category}:
     get:
       tags:
@@ -153,7 +176,7 @@ paths:
       responses:
         '204':
           description: successfully deleted Subscription
-          
+
   /login:
     post:
       tags:
@@ -366,6 +389,440 @@ paths:
         '204':
           description: successfully added user
 
+  /admin/situation-advisor/situation-types:
+    get:
+      tags:
+        - situationTypes
+      security:
+        - BearerAuth: []
+      operationId: getSituationTypes
+      summary: returns a list of all situation types
+      responses:
+        '200':
+          description: List of all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SituationType'
+    post:
+      tags:
+        - situationTypes
+      security:
+        - BearerAuth: []
+      operationId: addSituationType
+      summary: adds a new Situation Type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SituationType'
+      responses:
+        '204':
+          description: Situation Type successfully added
+
+    put:
+      tags:
+        - situationTypes
+      security:
+        - BearerAuth: []
+      operationId: updateSituationType
+      summary: Updates a Situation Type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SituationType'
+      responses:
+        '204':
+          description: Situation Type successfully updated
+  /admin/situation-advisor/situation-types/{id}:
+    get:
+      tags:
+        - situationType
+      operationId: getSituationType
+      summary: Get specific Situation Type
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: return a specific Situation Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SituationType'
+    delete:
+      tags:
+        - situationType
+      security:
+        - BearerAuth: []
+      operationId: deleteSituationType
+      summary: Deletes a Situation Type
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Situation Type successfully deleted
+
+  /admin/situation-advisor/situations:
+    get:
+      tags:
+        - situations
+      security:
+        - BearerAuth: []
+      operationId: getAllSituations
+      summary: Retrieves a list with all situations
+      responses:
+        '200':
+          description: List of all situations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Situation'
+    post:
+      tags:
+        - situations
+      security:
+        - BearerAuth: []
+      operationId: addSituation
+      summary: Creates a new situation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Situation'
+      responses:
+        '204':
+          description: Created successfully
+
+    put:
+      tags:
+        - situations
+      security:
+        - BearerAuth: []
+      operationId: updateSituation
+      summary: Updates a situation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Situation'
+      responses:
+        '204':
+          description: Update of Situation successfully
+
+  /admin/situation-advisor/situation/{id}:
+    get:
+      tags:
+        - situation
+      operationId: getSituation
+      summary: Get specific Situation
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: return a specific Situation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Situation'
+    delete:
+      tags:
+        - situation
+      security:
+        - BearerAuth: []
+      operationId: deleteSituation
+      summary: Deletes a Situation
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Situation successfully deleted
+
+  /admin/situation-advisor/situations-message-types:
+    get:
+      tags:
+        - situationMessageTypes
+      security:
+        - BearerAuth: []
+      operationId: getAllSituationMessageTypes
+      summary: Retrieves a list with all Situation Message Types
+      responses:
+        '200':
+          description: List of all Situation Message Types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SituationMessageType'
+    post:
+      tags:
+        - situationMessageTypes
+      security:
+        - BearerAuth: []
+      operationId: addSituationMessageType
+      summary: Creates a new Situation Message Type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SituationMessageType'
+      responses:
+        '204':
+          description: Created successfully
+
+    put:
+      tags:
+        - situationMessageTypes
+      security:
+        - BearerAuth: []
+      operationId: updateSituationMessageType
+      summary: Updates a Situation Message Type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SituationMessageType'
+      responses:
+        '204':
+          description: Update of Situation Message Type successfully
+
+  /admin/situation-advisor/situation-message-types/{id}:
+    get:
+      tags:
+        - situationMessageType
+      operationId: getSituationMessageType
+      summary: Get specific Situation Message Type
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: return a specific Situation Message Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SituationMessageType'
+    delete:
+      tags:
+        - situationMessageType
+      security:
+        - BearerAuth: []
+      operationId: deleteSituationMessageType
+      summary: Deletes a Situation Message Type
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Situation Message Type successfully
+
+  /admin/situation-advisor/situations-messages:
+    get:
+      tags:
+        - situationMessages
+      security:
+        - BearerAuth: []
+      operationId: getAllSituationMessages
+      summary: Retrieves a list with all Situation Messages
+      parameters:
+        - in: query
+          name: lastRequest
+          description: "Retrieve only the delta of information since last requst"
+          required: false
+          example: "2020-05-04T16:01:37.933Z"
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: List of all Situation Messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SituationMessage'
+    post:
+      tags:
+        - situationMessages
+      security:
+        - BearerAuth: []
+      operationId: addSituationMessage
+      summary: Creates a new Situation Message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SituationMessage'
+      responses:
+        '204':
+          description: Created successfully
+
+    put:
+      tags:
+        - situationMessages
+      security:
+        - BearerAuth: []
+      operationId: updateSituationMessage
+      summary: Updates a Situation Message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SituationMessage'
+      responses:
+        '204':
+          description: Update of Situation Message successfully
+
+  /admin/situation-advisor/situation-messages/{id}:
+    get:
+      tags:
+        - situationMessage
+      operationId: getSituationMessage
+      summary: Get specific Situation Message
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: return a specific Situation Message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SituationMessage'
+    delete:
+      tags:
+        - situationMessage
+      security:
+        - BearerAuth: []
+      operationId: deleteSituationMessage
+      summary: Deletes a Situation Message
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Situation Message successfully
+
+  /admin/situation-advisor/situations-references:
+    get:
+      tags:
+        - situationReferences
+      security:
+        - BearerAuth: []
+      operationId: getAllSituationReferences
+      summary: Retrieves a list with all Situation References
+      responses:
+        '200':
+          description: List of all Situation References
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SituationReference'
+    post:
+      tags:
+        - situationReferences
+      security:
+        - BearerAuth: []
+      operationId: addSituationReference
+      summary: Creates a new Situation Reference
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SituationReference'
+      responses:
+        '204':
+          description: Created successfully
+
+    put:
+      tags:
+        - situationReferences
+      security:
+        - BearerAuth: []
+      operationId: updateSituationReference
+      summary: Updates a Situation Reference
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SituationReference'
+      responses:
+        '204':
+          description: Update of Situation Message successfully
+
+  /admin/situation-advisor/situation-references/{id}:
+    get:
+      tags:
+        - situationReference
+      operationId: getSituationReference
+      summary: Get specific Situation Reference
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: return a specific Situation Reference
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SituationReference'
+    delete:
+      tags:
+        - situationReference
+      security:
+        - BearerAuth: []
+      operationId: deleteSituationReference
+      summary: Deletes a Situation Reference
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Situation Reference successfully
+
+
 components:
   schemas:
     Restriction:
@@ -421,21 +878,10 @@ components:
               type: string
               description: 'Further information for snoopy people'
               example: 'http://link/to/more/information'
-            tags:
-              type: array
-              items:
-                  type: string
-              default:
-              - ""
             verified:
               type: boolean
               description: 'whether this restriction has been verified yet'
               default: false
-            insertedBy:
-              type: string
-              description: 'What system (could also be a User) added this information'
-              default: 'unknown'
-              example: 'feed-analyser'
 
     Restrictions:
       type: array
@@ -508,13 +954,6 @@ components:
         - PUBLIC_PLACES
         - RETAIL
         - CURFEW
-        - UNCLASSIFIED
-
-    RestrictionTypes:
-      description: 'A list of RestrictionType'
-      type: array
-      items:
-        $ref: '#/components/schemas/RestrictionType'
 
     RestrictionState:
       description: 'Describes severeness of restriction'
@@ -522,10 +961,6 @@ components:
       enum:
         - BAN
         - RESTRICTION
-        - ADVISE
-        - WARNING
-        - INFORMATION
-
     AdditionalInformationCategories:
       type: array
       items:
@@ -575,6 +1010,174 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/RestrictionType'
+
+    SituationType:
+      type: object
+      description: "This object allows to categorize Situations into high level crysis."
+      properties:
+        id:
+          type: string
+          example: "54759eb3c090d83494e2d804"
+        name:
+          type: string
+          description: "Classifier."
+          example: "Pandemie"
+        description:
+          type: string
+          example: "Ausbruch einer Krankheit. Betrifft den gesamten Globus"
+        media:
+          type: string
+          example: "virus.png"
+
+    Situation:
+      type: object
+      description: "A Situation is a current crysis."
+      properties:
+        id:
+          type: string
+          example: "5eaf148a0d077d75108087d3"
+        typeId:
+          type: string
+          description: "Reference to SituationType"
+          example: "54759eb3c090d83494e2d804"
+        name:
+          type: string
+          description: "Describes the situation; like a title"
+          example: "Corona/Covid-19"
+        startDate:
+          type: string
+          format: date
+          description: "Start of the situation/crysis"
+          example: "2020-01-01"
+        endDate:
+          type: string
+          format: date
+          nullable: true
+          description: "End of situation/crysis"
+          example: "2020-12-31"
+        active:
+          type: boolean
+          default: true
+          description: "Toggles the afffectness of a situation/crysis. False will not trigger any action to a system/user (e. g. push notification)"
+
+    SituationMessageType:
+      type: object
+      description: "Classifies a SituationMessage into a type. Has impact to icon, coloring, severity of messages their handling"
+      properties:
+        id:
+          type: string
+          example: "5eaf17692c1f4e9671ec7111"
+        name:
+          type: string
+          description: "Speakable type of Type"
+          example: "Restrictive Instruktion"
+        media:
+          type: string
+          description: "Icon"
+          example: "exclamation-mark.svg"
+        color:
+          type: string
+          description: "Provides the possibility to annotate messages/headers with MessageType-based color"
+          example: "orange"
+
+    SituationMessage:
+      type: object
+      description: "Represents an instruction or an information to recipients or systems."
+      properties:
+        id:
+          type: string
+          example: "5eaf18e47badf06d7f3fbcc0"
+        situationId:
+          type: string
+          description: "Sorts the message to a situation/crysis"
+          example: "5eaf148a0d077d75108087d3"
+        messageTypeId:
+          type: string
+          description: "Classifies the Message as type of e.g. Restrictive-Instruction; inherits color schema, severity, etc."
+          example: "5eaf17692c1f4e9671ec7111"
+        title:
+          type: string
+          description: "Quick information/abstract about the message"
+          example: "Wearing a face mask is mandatory!"
+        message:
+          type: string
+          description: "Whole information. Fully formatable."
+          example: "By start of April, 20th 2020 you have to wear a face mask in supermarkets and all shop-alike stores."
+        abstract:
+          type: string
+          description: "Short text (excerpt) from the whole message"
+          example: "Please wear a face mask in shopping stores"
+        icon:
+          type: string
+          description: "Icon"
+          example: "mask.svg"
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/SituationReference'
+        areaOfEffect:
+          type: array
+          description: "A list of all GeoJson-Ids, where the Situation is taking place/is affected"
+          items:
+            type: string
+        status:
+          $ref: '#/components/schemas/SituationMessageStatus'
+        lastModifed:
+          type: string
+          format: date-time
+          description: "Timestamp of last modification"
+          example: "2020-05-03T12:02:30.000Z"
+        version:
+          type: number
+          description: "Every change increments the version. Full history possible"
+
+    SituationReference:
+      type: object
+      description: "References to source of information"
+      properties:
+        title:
+          type: string
+          description: "Allows to describe the source/reference"
+          example: "How to wear a face mask?"
+        type:
+          $ref: '#/components/schemas/SituationReferenceType'
+        classifier:
+          $ref: '#/components/schemas/SituationReferenceClassifier'
+        source:
+          type: string
+          description: "points to the source"
+          example: "http://darfichraus.de/mask-mandatory.pdf"
+
+
+    SituationReferenceType:
+      description: "Type of reference to build type-based-action"
+      type: string
+      enum:
+        - URL
+        - FILE
+        - PICTURE
+        - VIDEO
+        - VOICE
+        - OTHER
+
+    SituationReferenceClassifier:
+      description: "Classifies the reference as type of"
+      type: string
+      enum:
+        - ATTACHMENT
+        - SOURCE
+        - OTHER
+
+    SituationMessageStatus:
+      description: "Get information about the status"
+      type: string
+      enum:
+        - DRAFT
+        - APPROVED
+        - REVOKED
+        - OTHER
+
+
     BaseEntity:
       type: object
       discriminator:

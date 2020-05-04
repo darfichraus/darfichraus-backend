@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,31 @@ public class AdminController implements AdminApi {
     }
 
     @Override
+    public ResponseEntity<Void> deleteSituation(String id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteSituationMessage(String id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteSituationMessageType(String id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteSituationReference(String id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteSituationType(String id) {
+        return null;
+    }
+
+    @Override
     @RequireAnyRole("ROLE_ADMIN")
     public ResponseEntity<Void> deleteUser(final String email) {
         userService.delete(email);
@@ -62,6 +88,36 @@ public class AdminController implements AdminApi {
     @Override
     public ResponseEntity<List<MongoProfile>> getProfiles() {
         return ResponseEntity.ok(userService.getProfiles());
+    }
+
+    @Override
+    public ResponseEntity<de.darfichraus.model.Situation> getSituation(String id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<de.darfichraus.model.SituationMessage> getSituationMessage(String id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<de.darfichraus.model.SituationMessageType> getSituationMessageType(String id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<de.darfichraus.model.SituationReference> getSituationReference(String id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<de.darfichraus.model.SituationType> getSituationType(String id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<List<de.darfichraus.model.SituationType>> getSituationTypes() {
+        return null;
     }
 
     @Override
@@ -83,6 +139,26 @@ public class AdminController implements AdminApi {
     }
 
     @Override
+    public ResponseEntity<List<de.darfichraus.model.SituationMessageType>> getAllSituationMessageTypes() {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<List<de.darfichraus.model.SituationMessage>> getAllSituationMessages(Instant lastRequest) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<List<de.darfichraus.model.SituationReference>> getAllSituationReferences() {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<List<de.darfichraus.model.Situation>> getAllSituations() {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<List<Subscription>> getAllSubscriptions() {
         return ResponseEntity.ok(subscriptionService.getAllSubscriptions());
     }
@@ -99,8 +175,58 @@ public class AdminController implements AdminApi {
     }
 
     @Override
+    public ResponseEntity<Void> updateSituation(de.darfichraus.model.@Valid Situation situation) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> updateSituationMessage(de.darfichraus.model.@Valid SituationMessage situationMessage) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> updateSituationMessageType(de.darfichraus.model.@Valid SituationMessageType situationMessageType) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> updateSituationReference(de.darfichraus.model.@Valid SituationReference situationReference) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> updateSituationType(de.darfichraus.model.@Valid SituationType situationType) {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<Void> addAdditionalInformationToCategory(String category, @Valid Map<String, String> requestBody) {
         additionalInformationService.addAdditionalInformationToCategory(category, requestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<Void> addSituation(de.darfichraus.model.@Valid Situation situation) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> addSituationMessage(de.darfichraus.model.@Valid SituationMessage situationMessage) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> addSituationMessageType(de.darfichraus.model.@Valid SituationMessageType situationMessageType) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> addSituationReference(de.darfichraus.model.@Valid SituationReference situationReference) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> addSituationType(de.darfichraus.model.@Valid SituationType situationType) {
+        return null;
     }
 }
