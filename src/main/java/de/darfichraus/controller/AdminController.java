@@ -2,10 +2,12 @@ package de.darfichraus.controller;
 
 import de.darfichraus.api.AdminApi;
 import de.darfichraus.dto.Credentials;
-import de.darfichraus.model.Areal;
-import de.darfichraus.model.CredentialsWithRoles;
 import de.darfichraus.model.Restriction;
+import de.darfichraus.model.Restriction;
+import de.darfichraus.model.CredentialsWithRoles;
 import de.darfichraus.model.Subscription;
+import de.darfichraus.model.Areal;
+
 import de.darfichraus.service.AdditionalInformationService;
 import de.darfichraus.service.RestrictionService;
 import de.darfichraus.service.SubscriptionService;
@@ -18,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -144,7 +146,7 @@ public class AdminController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<List<de.darfichraus.model.SituationMessage>> getAllSituationMessages(Instant lastRequest) {
+    public ResponseEntity<List<de.darfichraus.model.SituationMessage>> getAllSituationMessages(@Valid OffsetDateTime lastRequest) {
         return null;
     }
 

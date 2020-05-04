@@ -3,8 +3,6 @@ package de.darfichraus.config;
 import com.google.common.collect.Lists;
 import com.mongodb.MongoClient;
 import de.darfichraus.entity.Users;
-import de.darfichraus.entity.converters.MongoProfileToStringConverter;
-import de.darfichraus.entity.converters.StringToMongoProfileConverter;
 import de.darfichraus.repository.UserRepository;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
@@ -100,7 +98,7 @@ public class Pac4JConfig {
 
     private MongoConverter buildMongoConverter(SimpleMongoDbFactory factory) {
         DbRefResolver dbRefResolver = new DefaultDbRefResolver(factory);
-        MongoCustomConversions conversions = new MongoCustomConversions(Lists.newArrayList(new MongoProfileToStringConverter(), new StringToMongoProfileConverter()));
+        MongoCustomConversions conversions = new MongoCustomConversions(Lists.newArrayList(new MongoConverters.MongoProfileToStringConverter(), new MongoConverters.StringToMongoProfileConverter()));
 
         MongoMappingContext mappingContext = new MongoMappingContext();
         mappingContext.setSimpleTypeHolder(conversions.getSimpleTypeHolder());
