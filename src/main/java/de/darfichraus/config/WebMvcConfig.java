@@ -1,6 +1,9 @@
 package de.darfichraus.config;
 
+import com.fatboyindustrial.gsonjavatime.Converters;
+import com.google.gson.GsonBuilder;
 import org.pac4j.core.config.Config;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -22,6 +25,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
+    }
+
+    @Bean
+    GsonBuilder gsonBuilder(){
+        GsonBuilder gsonBuilder=new GsonBuilder();
+        gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm");
+        Converters.registerAll(gsonBuilder);
+        return gsonBuilder;
     }
 
 }
