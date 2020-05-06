@@ -4,5 +4,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SituationTypeRepository extends MongoRepository<de.darfichraus.model.SituationType, String> {
+public interface SituationRepository extends MongoRepository<de.darfichraus.model.Situation, String> {
 }
