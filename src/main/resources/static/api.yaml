@@ -550,7 +550,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Situation'
 
-  /situation-advisor/situations/{id}/situation-messages/:
+  /situation-advisor/situations/{id}/situation-messages:
     get:
       tags:
         - situations_Public
@@ -669,7 +669,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SituationMessageType'
 
-  /admin/situation-advisor/situations-message-types:
+  /admin/situation-advisor/situation-message-types:
     post:
       tags:
         - situationMessageTypes_Admin
@@ -727,7 +727,7 @@ paths:
         '204':
           description: Situation Message Type successfully
 
-  /situation-advisor/situations-messages:
+  /situation-advisor/situation-messages:
     get:
       tags:
         - situationMessages_Public
@@ -773,7 +773,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SituationMessage'
 
-  /admin/situation-advisor/situations-messages:
+  /admin/situation-advisor/situation-messages:
     post:
       tags:
         - situationMessages_Admin
@@ -832,7 +832,7 @@ paths:
         '204':
           description: Situation Message successfully
 
-  /situation-advisor/situations-references:
+  /situation-advisor/situation-references:
     get:
       tags:
         - situationReferences_Public
@@ -870,7 +870,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SituationReference'
 
-  /admin/situation-advisor/situations-references:
+  /admin/situation-advisor/situation-references:
     post:
       tags:
         - situationReferences_Admin
@@ -1155,6 +1155,9 @@ components:
               type: string
               description: "Describes the situation; like a title"
               example: "Corona/Covid-19"
+            situationTypeId:
+              type: string
+              description: "Id of situation-type"
             startDate:
               type: string
               format: date
@@ -1227,7 +1230,7 @@ components:
               type: string
               description: "Whole information. Fully formatable."
               example: "By start of April, 20th 2020 you have to wear a face mask in supermarkets and all shop-alike stores."
-            abstract:
+            excerpt:
               type: string
               description: "Short text (excerpt) from the whole message"
               example: "Please wear a face mask in shopping stores"

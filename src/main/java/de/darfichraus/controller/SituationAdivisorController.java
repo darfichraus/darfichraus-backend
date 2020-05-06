@@ -105,7 +105,10 @@ public class SituationAdivisorController implements de.darfichraus.api.Situation
 
     @Override
     public ResponseEntity<List<SituationMessage>> getAllSituationMessagesForSituation(String id) {
-        return null;
+        return new ResponseEntity<>(
+                this.situationMessageService.findAllBySituationId(id),
+                HttpStatus.OK
+        );
     }
 
     @Override

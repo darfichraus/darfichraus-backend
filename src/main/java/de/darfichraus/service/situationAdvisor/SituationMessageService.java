@@ -3,16 +3,13 @@ package de.darfichraus.service.situationAdvisor;
 import de.darfichraus.model.SituationMessage;
 import de.darfichraus.repository.situationAdvisor.SituationMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
@@ -49,12 +46,13 @@ public class SituationMessageService {
         if (lastRequest == null) {
             messages = this.situationMessageRepository.findAll();
         } else {
-            ZoneId mst =ZoneId.of("Europe/Berlin");
-            OffsetDateTime mstOffsetDateTime = OffsetDateTime.now(ZoneId.from(lastRequest));
-            ZonedDateTime mstZonedDateTime = mstOffsetDateTime.atZoneSameInstant(mst);
-            messages = this.situationMessageRepository.findAllByModifiedAfter(mstZonedDateTime);
+            messages = this.situationMessageRepository.findAllByModifiedAfter(lastRequest.toInstant());
         }
 
         return messages;
+    }
+
+    public List<de.darfichraus.model.SituationMessage> findAllBySituationId(String id) {
+        return this.situationMessageRepository.findAllBySituationId(id);
     }
 }
