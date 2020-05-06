@@ -1303,12 +1303,8 @@ components:
       description: "Describes the severity of a subject"
       type: integer
       format: int32
-      enum:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
+      minimum: 1
+      maximum: 5
 
     BaseEntity:
       type: object
