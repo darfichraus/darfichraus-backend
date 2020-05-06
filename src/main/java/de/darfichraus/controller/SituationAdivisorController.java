@@ -1,5 +1,7 @@
 package de.darfichraus.controller;
 
+import de.darfichraus.model.Situation;
+import de.darfichraus.model.SituationMessage;
 import de.darfichraus.service.situationAdvisor.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -81,6 +83,11 @@ public class SituationAdivisorController implements de.darfichraus.api.Situation
     }
 
     @Override
+    public ResponseEntity<List<Situation>> getAllSituationForSituationType(String id) {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<List<de.darfichraus.model.SituationMessageType>> getAllSituationMessageTypes() {
         return new ResponseEntity<>(
                 this.situationMessageTypeService.findAll(),
@@ -94,6 +101,11 @@ public class SituationAdivisorController implements de.darfichraus.api.Situation
                 this.situationMessageService.findAll(lastRequest),
                 HttpStatus.OK
         );
+    }
+
+    @Override
+    public ResponseEntity<List<SituationMessage>> getAllSituationMessagesForSituation(String id) {
+        return null;
     }
 
     @Override

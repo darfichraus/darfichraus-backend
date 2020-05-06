@@ -432,6 +432,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/SituationType'
 
+  /situation-advisor/situation-types/{id}/situations:
+    get:
+      tags:
+        - situationTypes_Public
+      operationId: getAllSituationForSituationType
+      summary: Get specific Situation Type
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: return a list with all Situations by this type
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Situation'
+
   /admin/situation-advisor/situation-types:
     post:
       tags:
@@ -527,6 +549,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Situation'
+
+  /situation-advisor/situations/{id}/situation-messages/:
+    get:
+      tags:
+        - situations_Public
+      operationId: getAllSituationMessagesForSituation
+      summary: Get all situation-messages for specific Situation
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: return a specific Situation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SituationMessage'
 
   /admin/situation-advisor/situations:
     post:
@@ -1257,7 +1301,8 @@ components:
 
     SituationSeverity:
       description: "Describes the severity of a subject"
-      type: number
+      type: integer
+      format: int32
       enum:
         - 1
         - 2
