@@ -1366,7 +1366,8 @@ components:
             documents:
               type: array
               items:
-                $ref: '#/components/schemas/SituationReference'
+                type: string
+                description: "Reference to an object of Situation Reference"
             areaOfEffect:
               type: array
               description: "A list of all GeoJson-Ids, where the Situation is taking place/is affected"
@@ -1376,6 +1377,7 @@ components:
               type: array
               items:
                 type: string
+                description: "A list with all categories, the situation message is related to."
             status:
               $ref: '#/components/schemas/SituationMessageStatus'
             version:
