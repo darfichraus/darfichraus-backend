@@ -46,6 +46,10 @@ tags:
     description: Retrieve Situation Reference(s)
   - name: situationReferences_Admin
     description: Manage specific SituationReference
+  - name: situationCategories_Public
+    description: Retrieve Situation Categories
+  - name: situationCategories_Admin
+    description: Manage specific SituationCategory
 
 paths:
   /restrictions:
@@ -725,7 +729,7 @@ paths:
           required: true
       responses:
         '204':
-          description: Situation Message Type successfully
+          description: Situation Message Type successfully deleted
 
   /situation-advisor/situation-messages:
     get:
@@ -830,7 +834,7 @@ paths:
           required: true
       responses:
         '204':
-          description: Situation Message successfully
+          description: Situation Message successfully deleted
 
   /situation-advisor/situation-references:
     get:
@@ -905,7 +909,7 @@ paths:
               $ref: '#/components/schemas/SituationReference'
       responses:
         '204':
-          description: Update of Situation Message successfully
+          description: Update of Situation Reference successfully
           content:
             application/json:
               schema:
@@ -927,7 +931,126 @@ paths:
           required: true
       responses:
         '204':
-          description: Situation Reference successfully
+          description: Situation Reference successfully deleted
+
+  /situation-advisor/situation-categories:
+    get:
+      tags:
+        - situationCategories_Public
+      security:
+        - BearerAuth: []
+      operationId: getAllSituationCategories
+      summary: Retrieves a list with all Situation Categories
+      responses:
+        '200':
+          description: List of all Situation Categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SituationCategory'
+
+  /situation-advisor/situation-categories/{id}:
+    get:
+      tags:
+        - situationCategories_Public
+      operationId: getSituationCategory
+      summary: Get specific Situation Category
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: return a specific Situation Category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SituationCategory'
+
+  /situation-advisor/situation-categories/{id}/situation-messages:
+    get:
+      tags:
+        - situationCategories_Public
+      operationId: getSituationMessagesBySituationCategory
+      summary: Get all Situation Messages for a specific Situation Category
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: return a list of Situation Messages by Situation Category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SituationMessage'
+
+  /admin/situation-advisor/situation-categories:
+    post:
+      tags:
+        - situationCategories_Admin
+      security:
+        - BearerAuth: []
+      operationId: addSituationCategory
+      summary: Creates a new Situation Category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SituationCategory'
+      responses:
+        '204':
+          description: Created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SituationCategory'
+
+    put:
+      tags:
+        - situationCategories_Admin
+      security:
+        - BearerAuth: []
+      operationId: updateSituationCategory
+      summary: Updates a Situation Category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SituationCategory'
+      responses:
+        '204':
+          description: Update of Situation Category successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SituationCategory'
+
+  /admin/situation-advisor/situation-categories/{id}:
+    delete:
+      tags:
+        - situationCategories_Admin
+      security:
+        - BearerAuth: []
+      operationId: deleteSituationCategory
+      summary: Deletes a Situation Category
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Situation Category successfully deleted
 
 
 components:
@@ -1198,7 +1321,7 @@ components:
               $ref: '#/components/schemas/SituationSeverity'
             color:
               type: string
-              description: "Provides the possibility to annotate messages/headers with MessageType-based color"
+              description: "Provides the possibility to annotate messages/headers with MessageType-based color; preferred HEX value"
               example: "orange"
 
     SituationMessage:
@@ -1247,6 +1370,10 @@ components:
             areaOfEffect:
               type: array
               description: "A list of all GeoJson-Ids, where the Situation is taking place/is affected"
+              items:
+                type: string
+            affectedCategories:
+              type: array
               items:
                 type: string
             status:
@@ -1308,6 +1435,35 @@ components:
       format: int32
       minimum: 1
       maximum: 5
+
+    SituationCategory:
+      allOf:
+        - $ref: '#/components/schemas/BaseEntity'
+        - type: object
+          description: "Helps to clearify and cluster information"
+          properties:
+            name:
+              type: string
+              example: "Public Transportation"
+              description: "Names the category"
+            info:
+              type: string
+              example: "Information about train, highways, busses, etc."
+              description: "Short explanation of the category"
+            icon:
+              type: string
+              example: "bus.png"
+              description: "Remarkable Symbol"
+            color:
+              type: string
+              example: "blue"
+              description: "Color; preferred is HEX value"
+            active:
+              type: boolean
+              default: True
+              example: False
+              description: "Enables/disables the functionality/listing of the category"
+
 
     BaseEntity:
       type: object

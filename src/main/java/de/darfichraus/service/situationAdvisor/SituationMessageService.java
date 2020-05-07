@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.time.OffsetDateTime;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -54,5 +56,9 @@ public class SituationMessageService {
 
     public List<de.darfichraus.model.SituationMessage> findAllBySituationId(String id) {
         return this.situationMessageRepository.findAllBySituationId(id);
+    }
+
+    public List<SituationMessage> findAllByCategoryId(String id) {
+        return this.situationMessageRepository.findAllByAffectedCategories(id);
     }
 }

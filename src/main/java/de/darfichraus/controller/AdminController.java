@@ -3,6 +3,10 @@ package de.darfichraus.controller;
 import de.darfichraus.api.AdminApi;
 import de.darfichraus.dto.Credentials;
 
+import de.darfichraus.model.*;
+import de.darfichraus.model.*;
+import de.darfichraus.model.*;
+import de.darfichraus.model.*;
 import de.darfichraus.model.Areal;
 import de.darfichraus.model.CredentialsWithRoles;
 import de.darfichraus.model.Restriction;
@@ -35,6 +39,7 @@ public class AdminController implements AdminApi {
     private final SituationMessageTypeService situationMessageTypeService;
     private final SituationMessageService situationMessageService;
     private final SituationReferenceService situationReferenceService;
+    private final SituationCategoryService situationCategoryService;
 
     @Autowired
     public AdminController(RestrictionService restrictionService,
@@ -45,7 +50,8 @@ public class AdminController implements AdminApi {
                            SituationService situationService,
                            SituationMessageTypeService situationMessageTypeService,
                            SituationMessageService situationMessageService,
-                           SituationReferenceService situationReferenceService) {
+                           SituationReferenceService situationReferenceService,
+                           SituationCategoryService situationCategoryService) {
         this.restrictionService = restrictionService;
         this.additionalInformationService = additionalInformationService;
         this.userService = userService;
@@ -55,12 +61,19 @@ public class AdminController implements AdminApi {
         this.situationMessageTypeService = situationMessageTypeService;
         this.situationMessageService = situationMessageService;
         this.situationReferenceService = situationReferenceService;
+        this.situationCategoryService = situationCategoryService;
     }
 
     @Override
     @RequireAnyRole("ROLE_ADMIN")
     public ResponseEntity<Void> deleteSituation(String id) {
-        HttpStatus status = this.situationService.deleteById(id) ? HttpStatus.NO_CONTENT : HttpStatus.NO_CONTENT;
+        HttpStatus status = this.situationService.deleteById(id) ? HttpStatus.NO_CONTENT : HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(status);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteSituationCategory(String id) {
+        HttpStatus status = this.situationCategoryService.deleteById(id) ? HttpStatus.NO_CONTENT : HttpStatus.NOT_FOUND;
         return new ResponseEntity<>(status);
     }
 
@@ -129,6 +142,14 @@ public class AdminController implements AdminApi {
     public ResponseEntity<de.darfichraus.model.Situation> addSituation(de.darfichraus.model.@Valid Situation situation) {
         return new ResponseEntity<>(
                 this.situationService.save(situation),
+                HttpStatus.OK
+        );
+    }
+
+    @Override
+    public ResponseEntity<de.darfichraus.model.SituationCategory> addSituationCategory(de.darfichraus.model.@Valid SituationCategory situationCategory) {
+        return new ResponseEntity<>(
+                this.situationCategoryService.save(situationCategory),
                 HttpStatus.OK
         );
     }
@@ -206,6 +227,14 @@ public class AdminController implements AdminApi {
     public ResponseEntity<de.darfichraus.model.Situation> updateSituation(de.darfichraus.model.@Valid Situation situation) {
         return new ResponseEntity<>(
                 this.situationService.save(situation),
+                HttpStatus.OK
+        );
+    }
+
+    @Override
+    public ResponseEntity<de.darfichraus.model.SituationCategory> updateSituationCategory(de.darfichraus.model.@Valid SituationCategory situationCategory) {
+        return new ResponseEntity<>(
+                this.situationCategoryService.save(situationCategory),
                 HttpStatus.OK
         );
     }
