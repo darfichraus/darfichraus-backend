@@ -1,8 +1,8 @@
 package de.darfichraus.controller;
 
-import de.darfichraus.model.Situation;
 import de.darfichraus.model.SituationCategory;
-import de.darfichraus.model.SituationMessage;
+import de.darfichraus.model.SituationMessagesBySituationCategoryResponse;
+import de.darfichraus.model.SituationMessagesBySituationResponse;
 import de.darfichraus.service.situationAdvisor.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,9 +55,9 @@ public class SituationAdivisorController implements de.darfichraus.api.Situation
     }
 
     @Override
-    public ResponseEntity<de.darfichraus.model.SituationMessage> getSituationMessage(String id) {
+    public ResponseEntity<de.darfichraus.model.SituationMessageResponse> getSituationMessage(String id) {
         return new ResponseEntity<>(
-                this.situationMessageService.findById(id),
+                this.situationMessageService.resolveOne(id),
                 HttpStatus.OK
         );
     }
@@ -71,12 +71,10 @@ public class SituationAdivisorController implements de.darfichraus.api.Situation
     }
 
     @Override
-    public ResponseEntity<List<SituationMessage>> getSituationMessagesBySituationCategory(String id) {
-        return new ResponseEntity<>(
-                this.situationMessageService.findAllByCategoryId(id),
-                HttpStatus.OK
-        );
+    public ResponseEntity<List<SituationMessagesBySituationCategoryResponse>> getSituationMessagesBySituationCategory(String id) {
+        return null;
     }
+
 
     @Override
     public ResponseEntity<de.darfichraus.model.SituationReference> getSituationReference(String id) {
@@ -111,8 +109,11 @@ public class SituationAdivisorController implements de.darfichraus.api.Situation
     }
 
     @Override
-    public ResponseEntity<List<Situation>> getAllSituationForSituationType(String id) {
-        return null;
+    public ResponseEntity<de.darfichraus.model.SituationsBySituationTypeResponse> getAllSituationForSituationType(String id) {
+        return new ResponseEntity<>(
+                this.situationService.getAllBySituationTypeId(id),
+                HttpStatus.OK
+        );
     }
 
     @Override
@@ -124,17 +125,18 @@ public class SituationAdivisorController implements de.darfichraus.api.Situation
     }
 
     @Override
-    public ResponseEntity<List<de.darfichraus.model.SituationMessage>> getAllSituationMessages(@Valid OffsetDateTime lastRequest) {
+    public ResponseEntity<List<de.darfichraus.model.SituationMessageResponse>> getAllSituationMessages(@Valid OffsetDateTime lastRequest) {
         return new ResponseEntity<>(
-                this.situationMessageService.findAll(lastRequest),
+                this.situationMessageService.resolveAll(lastRequest),
                 HttpStatus.OK
         );
     }
 
+
     @Override
-    public ResponseEntity<List<SituationMessage>> getAllSituationMessagesForSituation(String id) {
+    public ResponseEntity<SituationMessagesBySituationResponse> getAllSituationMessagesForSituation(String id, @Valid Boolean resolved) {
         return new ResponseEntity<>(
-                this.situationMessageService.findAllBySituationId(id),
+                this.situationMessageService.resolveAllBySituationId(id),
                 HttpStatus.OK
         );
     }

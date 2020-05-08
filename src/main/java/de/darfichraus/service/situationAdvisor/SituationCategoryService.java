@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,5 +38,20 @@ public class SituationCategoryService {
 
     public de.darfichraus.model.SituationCategory save(SituationCategory situationCategory) {
         return this.situationCategoryRepository.save(situationCategory);
+    }
+
+    public List<SituationCategory> resolveIds(List<String> ids) {
+
+        List<SituationCategory> categories = new ArrayList<>();
+
+        ids.forEach(id -> {
+            try {
+                categories.add(this.getById(id));
+            } catch (EntityNotFoundException enfe) {
+
+            }
+        });
+
+        return categories;
     }
 }

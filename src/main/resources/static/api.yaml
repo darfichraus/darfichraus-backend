@@ -454,9 +454,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Situation'
+                $ref: '#/components/schemas/SituationsBySituationTypeResponse'
 
   /admin/situation-advisor/situation-types:
     post:
@@ -566,15 +564,18 @@ paths:
           schema:
             type: string
           required: true
+        - in: query
+          name: resolved
+          schema:
+            type: boolean
+          required: false
       responses:
         '200':
           description: return a specific Situation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SituationMessage'
+                $ref: '#/components/schemas/SituationMessagesBySituationResponse'
 
   /admin/situation-advisor/situations:
     post:
@@ -756,7 +757,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SituationMessage'
+                  $ref: '#/components/schemas/SituationMessageResponse'
+
   /situation-advisor/situation-messages/{id}:
     get:
       tags:
@@ -775,7 +777,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SituationMessage'
+                $ref: '#/components/schemas/SituationMessageResponse'
 
   /admin/situation-advisor/situation-messages:
     post:
@@ -991,7 +993,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SituationMessage'
+                  $ref: '#/components/schemas/SituationMessagesBySituationCategoryResponse'
 
   /admin/situation-advisor/situation-categories:
     post:
@@ -1438,6 +1440,54 @@ components:
       minimum: 1
       maximum: 5
 
+    SituationMessageResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseEntity'
+        - type: object
+          description: "A Situation Message with internally all entities resolved"
+          properties:
+            situation:
+              $ref: '#/components/schemas/Situation'
+            messageType:
+              $ref: '#/components/schemas/SituationMessageType'
+            title:
+              type: string
+              description: "Quick information/abstract about the message"
+              example: "Wearing a face mask is mandatory!"
+            message:
+              type: string
+              description: "Whole information. Fully formatable."
+              example: "By start of April, 20th 2020 you have to wear a face mask in supermarkets and all shop-alike stores."
+            excerpt:
+              type: string
+              description: "Short text (excerpt) from the whole message"
+              example: "Please wear a face mask in shopping stores"
+            icon:
+              type: string
+              description: "Icon"
+              example: "mask.svg"
+            severity:
+              $ref: '#/components/schemas/SituationSeverity'
+            documents:
+              type: array
+              items:
+                $ref: '#/components/schemas/SituationReference'
+            areaOfEffect:
+              type: array
+              description: "A list of all GeoJson-Ids, where the Situation is taking place/is affected"
+              items:
+                type: string
+            affectedCategories:
+              type: array
+              items:
+                $ref: '#/components/schemas/SituationCategory'
+            status:
+              $ref: '#/components/schemas/SituationMessageStatus'
+            version:
+              type: number
+              description: "Every change increments the version. Full history possible"
+
+
     SituationCategory:
       allOf:
         - $ref: '#/components/schemas/BaseEntity'
@@ -1465,6 +1515,39 @@ components:
               default: True
               example: False
               description: "Enables/disables the functionality/listing of the category"
+
+    SituationMessagesBySituationResponse:
+      type: object
+      description: "Full resolved object of Situation and its Messages"
+      properties:
+        situation:
+          $ref: '#/components/schemas/Situation'
+        situationMessages:
+          type: array
+          items:
+            $ref: '#/components/schemas/SituationMessageResponse'
+
+    SituationsBySituationTypeResponse:
+      type: object
+      description: "Full resolved object of Situations by Situation Type"
+      properties:
+        situationType:
+          $ref: '#/components/schemas/SituationType'
+        situations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Situation'
+
+    SituationMessagesBySituationCategoryResponse:
+      type: object
+      description: "Full resolved object of Situation Messages by Situation Category"
+      properties:
+        situationCategory:
+          $ref: '#/components/schemas/SituationCategory'
+        situationMessages:
+          type: array
+          items:
+            $ref: '#/components/schemas/SituationMessageResponse'
 
 
     BaseEntity:

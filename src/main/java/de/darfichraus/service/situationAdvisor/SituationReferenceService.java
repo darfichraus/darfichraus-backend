@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SituationReferenceService {
@@ -32,5 +34,19 @@ public class SituationReferenceService {
 
     public de.darfichraus.model.SituationReference save(SituationReference situationReference) {
         return this.situationReferenceRepository.save(situationReference);
+    }
+
+    public List<de.darfichraus.model.SituationReference> resolveIds(List<String> documents) {
+
+        List<SituationReference> references = new ArrayList<>();
+        documents.forEach(id -> {
+            try {
+                references.add(this.getById(id));
+            } catch (EntityNotFoundException enfe) {
+                // ToDo: Logging
+            }
+        });
+        
+        return references;
     }
 }
