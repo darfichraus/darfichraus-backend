@@ -167,8 +167,6 @@ public class SituationMessageService {
         situationMessageResponse.setStatus(message.getStatus());
         situationMessageResponse.setVersion(message.getVersion());
         situationMessageResponse.setModified(message.getModified());
-        situationMessageResponse.setCreated(message.getCreated());
-
         return situationMessageResponse;
     }
 }

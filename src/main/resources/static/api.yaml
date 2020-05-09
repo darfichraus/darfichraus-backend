@@ -17,7 +17,9 @@ tags:
   - name: additionalInformation
     description: further information for states, categories, etc.
   - name: subscription
-    description: Allow users to subscripe (for notifications)
+    description: Allow users to subscribe (for notifications)
+  - name: WebResources_Public
+    description: get WebResources
   - name: login
     description: Login
   - name: admin
@@ -50,6 +52,8 @@ tags:
     description: Retrieve Situation Categories
   - name: situationCategories_Admin
     description: Manage specific SituationCategory
+  - name: WebResources_Admin
+    description: Manage WebResources
 
 paths:
   /restrictions:
@@ -995,6 +999,118 @@ paths:
                 items:
                   $ref: '#/components/schemas/SituationMessagesBySituationCategoryResponse'
 
+
+  /webresources/{id}:
+    get:
+      tags:
+        - WebResources_Public
+      operationId: getWebResourcesById
+      summary: Get WebResource by Id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: return a specific WebResource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebResource'
+  /webresources/{id}/download:
+    get:
+      tags:
+        - WebResources_Public
+      operationId: getRawWebResourcesById
+      summary: download resource by Id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: return a raw specific WebResource
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+
+  /admin/webresources:
+    post:
+      tags:
+        - WebResources_Admin
+      security:
+        - BearerAuth: []
+      operationId: addWebResource
+      summary: Saves a file to the database
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+                - file
+      responses:
+        '200':
+          description: Created successfully, returns id
+          content:
+            text/plain:
+              schema:
+                type: string
+    get:
+      tags:
+        - WebResources_Admin
+      security:
+        - BearerAuth: []
+      operationId: getAllWebResources
+      parameters:
+        - in: query
+          name: includeFiles
+          description: "include files in response"
+          required: false
+          example: "true"
+          schema:
+            type: boolean
+      summary: get all resources stored in db
+      responses:
+        '200':
+          description: all resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebResource'
+
+  /admin/webresources/{id}:
+    delete:
+      tags:
+        - WebResources_Admin
+      security:
+        - BearerAuth: []
+      operationId: deleteWebResource
+      summary: Deletes a WebResource
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: WebResource successfully deleted
+
+
   /admin/situation-advisor/situation-categories:
     post:
       tags:
@@ -1242,6 +1358,23 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/RestrictionType'
+    WebResource:
+      allOf:
+        - $ref: '#/components/schemas/BaseEntity'
+        - type: object
+          required:
+            - file
+            - contentType
+            - fileName
+          properties:
+            file:
+              type: string
+              format: byte
+              description: Base64-encoded contents of uploaded file
+            contentType:
+              type: string
+            fileName:
+              type: string
 
     SituationType:
       allOf:

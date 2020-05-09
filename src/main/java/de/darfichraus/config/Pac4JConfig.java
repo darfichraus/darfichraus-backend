@@ -58,7 +58,7 @@ public class Pac4JConfig {
         DirectBearerAuthClient jwtClient = new DirectBearerAuthClient(jwtAuthenticator());
         Clients clients = new Clients(jwtClient, headerClient);
         final Config config = new Config(clients);
-        config.addMatcher("excludedPath", new PathMatcher().excludeRegex("^(\\/error)|(\\/actuator\\/.*)|(\\/api\\.yaml)$"));
+        config.addMatcher("excludedPath", new PathMatcher().excludeRegex("^(\\/webresources\\/.*)|(\\/error)|(\\/actuator\\/.*)|(\\/api\\.yaml)$"));
         return config;
     }
 

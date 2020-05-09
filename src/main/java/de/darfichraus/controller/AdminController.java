@@ -2,19 +2,9 @@ package de.darfichraus.controller;
 
 import de.darfichraus.api.AdminApi;
 import de.darfichraus.dto.Credentials;
-
 import de.darfichraus.model.*;
-import de.darfichraus.model.*;
-import de.darfichraus.model.*;
-import de.darfichraus.model.*;
-import de.darfichraus.model.Areal;
-import de.darfichraus.model.CredentialsWithRoles;
-import de.darfichraus.model.Restriction;
-import de.darfichraus.model.Subscription;
-import de.darfichraus.service.AdditionalInformationService;
-import de.darfichraus.service.RestrictionService;
-import de.darfichraus.service.SubscriptionService;
-import de.darfichraus.service.UserService;
+import de.darfichraus.model.WebResource;
+import de.darfichraus.service.*;
 import de.darfichraus.service.situationAdvisor.*;
 import org.pac4j.mongo.profile.MongoProfile;
 import org.pac4j.springframework.annotation.ws.RequireAnyRole;
@@ -22,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +32,7 @@ public class AdminController implements AdminApi {
     private final SituationMessageService situationMessageService;
     private final SituationReferenceService situationReferenceService;
     private final SituationCategoryService situationCategoryService;
+    private final WebResourceService webResourceService;
 
     @Autowired
     public AdminController(RestrictionService restrictionService,
@@ -51,7 +44,8 @@ public class AdminController implements AdminApi {
                            SituationMessageTypeService situationMessageTypeService,
                            SituationMessageService situationMessageService,
                            SituationReferenceService situationReferenceService,
-                           SituationCategoryService situationCategoryService) {
+                           SituationCategoryService situationCategoryService,
+                           WebResourceService webResourceService) {
         this.restrictionService = restrictionService;
         this.additionalInformationService = additionalInformationService;
         this.userService = userService;
@@ -62,6 +56,7 @@ public class AdminController implements AdminApi {
         this.situationMessageService = situationMessageService;
         this.situationReferenceService = situationReferenceService;
         this.situationCategoryService = situationCategoryService;
+        this.webResourceService = webResourceService;
     }
 
     @Override
@@ -114,6 +109,13 @@ public class AdminController implements AdminApi {
 
     @Override
     @RequireAnyRole("ROLE_ADMIN")
+    public ResponseEntity<Void> deleteWebResource(String id) {
+        webResourceService.deleteWebResource(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    @RequireAnyRole("ROLE_ADMIN")
     public ResponseEntity<Void> editUser(MongoProfile mongoProfile) {
         userService.changeUser(mongoProfile);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -127,7 +129,7 @@ public class AdminController implements AdminApi {
 
     @Override
     @RequireAnyRole("ROLE_ADMIN")
-    public ResponseEntity<Void> registerUser(@Valid CredentialsWithRoles credentialsWithRoles) {
+    public ResponseEntity<Void> registerUser(@Valid de.darfichraus.model.CredentialsWithRoles credentialsWithRoles) {
         userService.create(credentialsWithRoles);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -190,6 +192,16 @@ public class AdminController implements AdminApi {
     }
 
     @Override
+    @RequireAnyRole("ROLE_ADMIN")
+    public ResponseEntity<String> addWebResource(@Valid MultipartFile file) {
+        try {
+            return ResponseEntity.ok(webResourceService.addWebResource(file));
+        } catch (IOException e) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
+    }
+
+    @Override
     public ResponseEntity<Void> changePassword(@Valid Credentials credentials) {
         userService.changePassword(credentials);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -201,23 +213,28 @@ public class AdminController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<List<Restriction>> getAllRestrictions() {
+    public ResponseEntity<List<de.darfichraus.model.Restriction>> getAllRestrictions() {
         return ResponseEntity.ok(restrictionService.getAllRestrictions());
     }
 
 
     @Override
-    public ResponseEntity<List<Subscription>> getAllSubscriptions() {
+    public ResponseEntity<List<de.darfichraus.model.Subscription>> getAllSubscriptions() {
         return ResponseEntity.ok(subscriptionService.getAllSubscriptions());
     }
 
     @Override
-    public ResponseEntity<List<Subscription>> getSubscriptionsByArealAndArealIdentifier(Areal areal, String arealIdentifier) {
+    public ResponseEntity<List<WebResource>> getAllWebResources(@Valid Boolean includeFiles) {
+        return ResponseEntity.ok(webResourceService.getAllResources(includeFiles));
+    }
+
+    @Override
+    public ResponseEntity<List<de.darfichraus.model.Subscription>> getSubscriptionsByArealAndArealIdentifier(de.darfichraus.model.Areal areal, String arealIdentifier) {
         return ResponseEntity.ok(subscriptionService.getSubscriptionsByArealAndArealIdentifier(areal, arealIdentifier));
     }
 
     @Override
-    public ResponseEntity<Void> updateRestriction(@Valid Restriction restriction) {
+    public ResponseEntity<Void> updateRestriction(@Valid de.darfichraus.model.Restriction restriction) {
         restrictionService.update(restriction);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

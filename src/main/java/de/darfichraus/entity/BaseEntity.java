@@ -1,6 +1,5 @@
 package de.darfichraus.entity;
 
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.Id;
@@ -13,9 +12,6 @@ public class BaseEntity {
     @Id
     private String id;
 
-    @CreatedDate
-    private Instant created;
-
     @LastModifiedDate
     private Instant modified;
 
@@ -25,14 +21,6 @@ public class BaseEntity {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Instant getCreated() {
-        return created;
-    }
-
-    public void setCreated(Instant created) {
-        this.created = created;
     }
 
     public Instant getModified() {
