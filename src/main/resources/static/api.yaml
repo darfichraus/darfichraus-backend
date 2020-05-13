@@ -54,6 +54,8 @@ tags:
     description: Manage specific SituationCategory
   - name: WebResources_Admin
     description: Manage WebResources
+  - name: healthInformation
+    description: Returns geolocation based information about the current disease and its effects onto the population
 
 paths:
   /restrictions:
@@ -1170,6 +1172,67 @@ paths:
         '204':
           description: Situation Category successfully deleted
 
+  /geodata/by-zip/{zip}:
+    get:
+      tags:
+        - locationFinder
+      operationId: findLocationsByZip
+      summary: "Find all Location-Information for specific ZIP. Will return a list of Locations to resolve from loweste layer (city/ZIP) to highest (country). So the layerorder is ZIP -> COUNTY -> STATE -> COUNTRY"
+      parameters:
+        - in: path
+          name: zip
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: "A list with all layers and/or matches"
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/LocationResponse'
+
+  /geodata/by-zip-part/{zip}:
+    get:
+      tags:
+        - locationFinder
+      operationId: findLocationsByZipLike
+      summary: "Find all Location-Information for ZIP part. Type ahead feature."
+      parameters:
+        - in: path
+          name: zip
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: "A list with all matching ZIP part"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZipSearchResponse'
+
+  /health-information/by-zip/{zip}:
+    get:
+      tags:
+        - healthInformation
+      operationId: getHealthInformationByZip
+      summary: "Returns ZIP based health information"
+      parameters:
+        - in: path
+          name: zip
+          schema: 
+            type: string
+          required: true
+      responses:
+        '200':
+          description: "Health-Information based on ZIP"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthInformationResponse'
+
+
 
 components:
   schemas:
@@ -1682,6 +1745,156 @@ components:
           items:
             $ref: '#/components/schemas/SituationMessageResponse'
 
+    Location:
+      type: object
+      description: "Returns all relevant information about a location"
+      properties:
+        name:
+          type: string
+          description: "Name of the Location"
+          example: "Bad Aibling"
+        locationType:
+          $ref: '#/components/schemas/LocationType'
+        geoId:
+          type: string
+          description: "Links to the GeoJson-Id"
+
+    CityInformation:
+      type: object
+      description: "Returns information of a city"
+      properties:
+        city: 
+          type: string
+          description: "Name of the City"
+          example: "Bad Aibling"
+        zip:
+          type: string
+          description: "ZIP code of the City"
+          example: "83043"
+        county:
+          type: string
+          description: "Name of County, the City is in"
+          example: "Landkreis Rosenheim"
+        state: 
+          type: string
+          description: "Name of the State, the City is in"
+          example: "Bayern"
+        country:
+          type: string
+          description: "Name of the Country, the City is in"
+          example: "Deutschland"
+
+
+    LocationType:
+      type: string
+      enum:
+        - CITY
+        - COUNTY
+        - ADMINISTRATIVE_AREA
+        - STATE
+        - COUNTRY
+
+    LocationResponse:
+      type: object
+      description: "Result for a Location Lookup"
+      properties:
+        city:
+          $ref: '#/components/schemas/CityInformation'
+        hierarchy:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+
+    ZipSearchResponse:
+      type: object
+      description: "Returns a list with all matching Cities."
+      properties:
+        zip-part:
+          type: string
+          description: "Returns the search part"
+          example: "830"
+        count:
+          type: integer
+          description: "Count of matching cities"
+          example: 42
+        cities:
+          type: array
+          description: "List with all matches"
+          items:
+            $ref: '#/components/schemas/CityInformation'
+
+    HealthInformationResponse:
+      type: object
+      description: "Information about diseases at Geo-Location"
+      properties:
+        location:
+          $ref: '#/components/schemas/CityInformation'
+        healthInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/HealthInformation'
+
+    HealthInformation:
+      type: object
+      description: "Information about current disease"
+      properties:
+        gen:
+          type: string
+          description: "Name of Geo-Location"
+          example: "Rosenheim"
+        bez: 
+          type: string
+          description: "Prefix of Geo-Location"
+          example: "Landkreis"
+        ewz:
+          type: integer
+          description: "Population of Geo-Location"
+          example: 260983
+        deathRate:
+          type: number
+          format: double
+          description: "Rate of death, based on population"
+          example: 7.29893072989307
+        cases:
+          type: integer
+          description: "Number of infacted people"
+          example: 2151
+        deaths:
+          type: integer
+          description: "Number of people passed away, caused by disease"
+          example: 157
+        casesPer100k:
+          type: number
+          format: double
+          description: "Infected people per population of 100.000"
+          example: 824.191614013173
+        casesPerPopulation:
+          type: number
+          format: double
+          description: ""
+          example: 0.824191614013173
+        bl:
+          type: string
+          description: "Name of State"
+          example: "Bayern"
+        county:
+          type: string
+          description: "Qualified name of Geo-Location"
+          example: "LK Rosenheim"
+        lastUpdate:
+          type: string
+          description: "Latest update"
+          example: "11.05.2020, 00:00 Uhr"
+        cases7Per100k:
+          type: number
+          format: double
+          description: "Critical value to determine how fast the disease spreads and the Geo-Location is close to a lock down"
+          example: 29.5038374146975
+        districtType:
+          type: string
+          description: "Specifies the type of Geo-Location"
+          example: "Landkreis"
+        
 
     BaseEntity:
       type: object

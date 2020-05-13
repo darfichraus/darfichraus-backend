@@ -3,13 +3,14 @@ package de.darfichraus.controller;
 import de.darfichraus.dto.NearGeoData;
 import de.darfichraus.entity.GeoData;
 import de.darfichraus.service.GeoDataService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-public class GeoDataController {
+public class GeoDataController implements de.darfichraus.api.GeodataApi {
 
     final GeoDataService geoDataService;
 
@@ -37,4 +38,20 @@ public class GeoDataController {
         return ResponseEntity.ok(geoDataService.getGeoDataNearLocation(nearGeoData));
     }
 
+    @Override
+    public ResponseEntity<de.darfichraus.model.LocationResponse> findLocationsByZip(String zip) {
+        return new ResponseEntity<>(
+                this.geoDataService.findLocationsByZip(zip),
+                HttpStatus.OK
+        );
+    }
+
+    @Override
+    public ResponseEntity<de.darfichraus.model.ZipSearchResponse> findLocationsByZipLike(String zip) {
+
+        return new ResponseEntity<>(
+                this.geoDataService.findLocationsByZipPart(zip),
+                HttpStatus.OK
+        );
+    }
 }

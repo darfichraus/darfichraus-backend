@@ -31,4 +31,13 @@ public interface GeoDataRepository extends MongoRepository<GeoData, String> {
             "    }\n" +
             "}")
     List<GeoData> findByGeometryNear(double x, double y, int distanceInMeters);
+
+    @Query(value = "{ \"properties.TYPE_3\": { $exists: true  },\"properties.NAME_3\": { $regex: \"?0\"}}}}")
+    List<GeoData> findAllCitiesByPropertiesRegex(String city);
+
+    @Query(value = "{ \"properties.TYPE_2\": { $exists: true  },\"properties.NAME_2\": { $regex: \"?0\"}}}}")
+    GeoData findAdministrationArea(String adminAreaName);
+
+    @Query(value = "{ \"properties.TYPE_1\": { $exists: true  },\"properties.NAME_1\": \"?0\"}}}")
+    GeoData findState(String state);
 }

@@ -71,6 +71,7 @@ openApiGenerate {
             Credentials               : "de.darfichraus.dto.Credentials",
             BaseEntity                : "de.darfichraus.entity.BaseEntity",
             User                      : "org.pac4j.mongo.profile.MongoProfile",
+            HealthInformation         : "de.darfichraus.entity.HealthCountyInformation"
     ]
 }
 sourceSets.main.java.srcDir new File(generatedBuildDir, 'src/gen/java')
