@@ -94,7 +94,8 @@ public class GeoDataService {
             Location location = new Location();
             location.setGeoId(geo.getId());
             if (geo.getProperties().containsKey("ENGTYPE_3")) {
-                if (geo.getProperties().get("ENGTYPE_3").equals("Urban district")) {
+                if (!(geo.getProperties().get("ENGTYPE_3") == null) && (
+                        geo.getProperties().get("ENGTYPE_3").equals("Urban district"))) {
                     if (!cityOrCounty.equalsIgnoreCase(city)) {
                         return;
                     }
