@@ -1,8 +1,6 @@
 package de.darfichraus.service;
 
-import com.sun.tools.javac.file.Locations;
 import de.darfichraus.entity.HealthCountyInformation;
-import de.darfichraus.entity.Mapping;
 import de.darfichraus.model.HealthInformationResponse;
 import de.darfichraus.model.LocationType;
 import de.darfichraus.repository.HealthCountyInformationRepository;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
