@@ -5,6 +5,7 @@ import de.darfichraus.model.HealthInformationResponse;
 import de.darfichraus.model.LocationType;
 import de.darfichraus.repository.HealthCountyInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -49,7 +50,7 @@ public class HealthInformationService {
 
     public List<HealthCountyInformation> getByCounty(String county) {
 
-        List<HealthCountyInformation> healthCountyInformation = this.healthCountyInformationRepository.findByCounty(county);
+        List<HealthCountyInformation> healthCountyInformation = this.healthCountyInformationRepository.findByCounty(county, Sort.by(Sort.Direction.DESC, "id"));
 
         if (healthCountyInformation == null || healthCountyInformation.isEmpty()) {
             throw new EntityNotFoundException(county + " not found");
