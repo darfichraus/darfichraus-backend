@@ -63,7 +63,8 @@ public class HealthInformationService {
 
         List<de.darfichraus.model.Location> locations = new ArrayList<>();
         de.darfichraus.model.LocationResponse locationResponse = this.geoDataService.findLocationsByZip(zip);
-        String city = locationResponse.getCity().getCity();
+
+        boolean isCityZip = locationResponse.getCity().getCounty().isEmpty();
 
         locations.addAll(locationResponse.getHierarchy().stream().
                 filter(location -> (location.getLocationType() == LocationType.COUNTY) || (location.getLocationType() == LocationType.CITY)).
@@ -78,7 +79,21 @@ public class HealthInformationService {
 
         de.darfichraus.model.HealthInformationResponse response = new HealthInformationResponse();
         response.setLocation(locationResponse.getCity());
-        response.setHealthInformation(healthCountyInformation.stream().filter(distinctByKey(HealthCountyInformation::getId)).collect(Collectors.toList()));
+
+        if (isCityZip) {
+            response.setHealthInformation(
+                    healthCountyInformation.stream()
+                            .filter(item -> item.getDistrictType().equalsIgnoreCase("Stadt"))
+                            .filter(distinctByKey(HealthCountyInformation::getId))
+                            .collect(Collectors.toList()));
+        } else {
+            response.setHealthInformation(
+                    healthCountyInformation.stream()
+                            .filter(item -> item.getDistrictType().equalsIgnoreCase("Landkreis"))
+                            .filter(distinctByKey(HealthCountyInformation::getId))
+                            .collect(Collectors.toList())
+            );
+        }
 
         return response;
     }
