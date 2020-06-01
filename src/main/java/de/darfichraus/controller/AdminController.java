@@ -3,6 +3,8 @@ package de.darfichraus.controller;
 import de.darfichraus.api.AdminApi;
 import de.darfichraus.dto.Credentials;
 import de.darfichraus.model.*;
+import de.darfichraus.model.Situation;
+import de.darfichraus.model.SituationsResponse;
 import de.darfichraus.model.WebResource;
 import de.darfichraus.service.*;
 import de.darfichraus.service.situationAdvisor.*;
@@ -141,7 +143,7 @@ public class AdminController implements AdminApi {
 
     @Override
     @RequireAnyRole("ROLE_ADMIN")
-    public ResponseEntity<de.darfichraus.model.Situation> addSituation(de.darfichraus.model.@Valid Situation situation) {
+    public ResponseEntity<SituationsResponse> addSituation(@Valid Situation situation) {
         return new ResponseEntity<>(
                 this.situationService.save(situation),
                 HttpStatus.OK
@@ -241,7 +243,7 @@ public class AdminController implements AdminApi {
 
     @Override
     @RequireAnyRole("ROLE_ADMIN")
-    public ResponseEntity<de.darfichraus.model.Situation> updateSituation(de.darfichraus.model.@Valid Situation situation) {
+    public ResponseEntity<SituationsResponse> updateSituation(@Valid Situation situation) {
         return new ResponseEntity<>(
                 this.situationService.save(situation),
                 HttpStatus.OK

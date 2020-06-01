@@ -3,6 +3,7 @@ package de.darfichraus.controller;
 import de.darfichraus.model.SituationCategory;
 import de.darfichraus.model.SituationMessagesBySituationCategoryResponse;
 import de.darfichraus.model.SituationMessagesBySituationResponse;
+import de.darfichraus.model.SituationsResponse;
 import de.darfichraus.service.situationAdvisor.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class SituationAdivisorController implements de.darfichraus.api.Situation
     }
 
     @Override
-    public ResponseEntity<de.darfichraus.model.Situation> getSituation(String id) {
+    public ResponseEntity<SituationsResponse> getSituation(String id) {
         return new ResponseEntity<>(
                 this.situationService.getById(id),
                 HttpStatus.OK
@@ -143,11 +144,14 @@ public class SituationAdivisorController implements de.darfichraus.api.Situation
 
     @Override
     public ResponseEntity<List<de.darfichraus.model.SituationReference>> getAllSituationReferences() {
-        return null;
+        return new ResponseEntity<>(
+                this.situationReferenceService.getAll(),
+                HttpStatus.OK
+        );
     }
 
     @Override
-    public ResponseEntity<List<de.darfichraus.model.Situation>> getAllSituations() {
+    public ResponseEntity<List<SituationsResponse>> getAllSituations() {
         return new ResponseEntity<>(
                 this.situationService.getAll(),
                 HttpStatus.OK
