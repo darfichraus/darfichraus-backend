@@ -536,7 +536,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Situation'
+                  $ref: '#/components/schemas/SituationsResponse'
 
   /situation-advisor/situations/{id}:
     get:
@@ -556,7 +556,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Situation'
+                $ref: '#/components/schemas/SituationsResponse'
 
   /situation-advisor/situations/{id}/situation-messages:
     get:
@@ -602,7 +602,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Situation'
+                $ref: '#/components/schemas/SituationsResponse'
 
     put:
       tags:
@@ -622,7 +622,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Situation'
+                $ref: '#/components/schemas/SituationsResponse'
 
   /admin/situation-advisor/situations/{id}:
     delete:
@@ -1190,7 +1190,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/LocationResponse'
+                $ref: '#/components/schemas/LocationResponse'
 
   /geodata/by-zip-part/{zip}:
     get:
@@ -1221,7 +1221,7 @@ paths:
       parameters:
         - in: path
           name: zip
-          schema: 
+          schema:
             type: string
           required: true
       responses:
@@ -1733,6 +1733,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Situation'
+    SituationsResponse:
+      type: object
+      readOnly: true
+      description: "Full resolved objects"
+      allOf:
+        - $ref: '#/components/schemas/Situation'
+        - type: object
+          description: "allows to get situationType fully resolved"
+          properties:
+            situationType:
+              $ref: '#/components/schemas/SituationType'
 
     SituationMessagesBySituationCategoryResponse:
       type: object
@@ -1763,7 +1774,7 @@ components:
       type: object
       description: "Returns information of a city"
       properties:
-        city: 
+        city:
           type: string
           description: "Name of the City"
           example: "Bad Aibling"
@@ -1775,7 +1786,7 @@ components:
           type: string
           description: "Name of County, the City is in"
           example: "Landkreis Rosenheim"
-        state: 
+        state:
           type: string
           description: "Name of the State, the City is in"
           example: "Bayern"
@@ -1842,7 +1853,7 @@ components:
           type: string
           description: "Name of Geo-Location"
           example: "Rosenheim"
-        bez: 
+        bez:
           type: string
           description: "Prefix of Geo-Location"
           example: "Landkreis"
@@ -1894,7 +1905,7 @@ components:
           type: string
           description: "Specifies the type of Geo-Location"
           example: "Landkreis"
-        
+
 
     BaseEntity:
       type: object

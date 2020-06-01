@@ -28,15 +28,19 @@ public class SituationReferenceService {
         return true;
     }
 
-    public de.darfichraus.model.SituationReference getById(String id) {
+    public SituationReference getById(String id) {
         return this.situationReferenceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + " not found"));
     }
 
-    public de.darfichraus.model.SituationReference save(SituationReference situationReference) {
+    public SituationReference save(SituationReference situationReference) {
         return this.situationReferenceRepository.save(situationReference);
     }
 
-    public List<de.darfichraus.model.SituationReference> resolveIds(List<String> documents) {
+    public List<SituationReference> getAll() {
+        return this.situationReferenceRepository.findAll();
+    }
+
+    public List<SituationReference> resolveIds(List<String> documents) {
 
         List<SituationReference> references = new ArrayList<>();
         documents.forEach(id -> {
@@ -46,7 +50,7 @@ public class SituationReferenceService {
                 // ToDo: Logging
             }
         });
-        
+
         return references;
     }
 }
