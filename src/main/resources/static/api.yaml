@@ -1487,7 +1487,6 @@ components:
             endDate:
               type: string
               format: date
-              nullable: true
               description: "End of situation/crysis"
               example: "2020-12-31"
             severity:
