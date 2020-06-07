@@ -167,6 +167,7 @@ public class SituationMessageService {
         situationMessageResponse.setStatus(message.getStatus());
         situationMessageResponse.setVersion(message.getVersion());
         situationMessageResponse.setModified(message.getModified());
+        situationMessageResponse.setAreaOfEffect(message.getAreaOfEffect());
         return situationMessageResponse;
     }
 }
