@@ -1,13 +1,12 @@
 package de.darfichraus.service;
 
-import de.darfichraus.dto.NearGeoData;
-import de.darfichraus.entity.GeoData;
+import de.darfichraus.model.GeoNearRequest;
+import de.darfichraus.model.GeoData;
 import de.darfichraus.entity.Mapping;
-import de.darfichraus.model.CityInformation;
 import de.darfichraus.model.Location;
-import de.darfichraus.model.LocationResponse;
-import de.darfichraus.model.LocationType;
+import de.darfichraus.model.*;
 import de.darfichraus.repository.GeoDataRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -40,7 +39,7 @@ public class GeoDataService {
         return geoDataRepository.findAllRegionalAreasForAdminArea(admin);
     }
 
-    public List<GeoData> getGeoDataNearLocation(NearGeoData nearGeoData) {
+    public List<GeoData> getGeoDataNearLocation(GeoNearRequest nearGeoData) {
         return geoDataRepository.findByGeometryNear(nearGeoData.getPoint().getX(), nearGeoData.getPoint().getY(), nearGeoData.getDistanceInMeters());
     }
 
@@ -192,12 +191,16 @@ public class GeoDataService {
     public de.darfichraus.model.ZipSearchResponse findLocationsByZipPart(String zip) {
 
         List<CityInformation> cityInformation = this.mappingService.findAllByZipStartingWith(zip);
-
         de.darfichraus.model.ZipSearchResponse zipSearchResponse = new de.darfichraus.model.ZipSearchResponse();
         zipSearchResponse.setZipPart(zip);
         zipSearchResponse.setCount(cityInformation.size());
         zipSearchResponse.setCities(cityInformation);
-
         return zipSearchResponse;
+    }
+
+    public GeoData getGeoDataById(String id) {
+
+        return geoDataRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("id not found:"+id));
+
     }
 }

@@ -1172,6 +1172,103 @@ paths:
         '204':
           description: Situation Category successfully deleted
 
+  /geodata/{id}:
+    get:
+      tags:
+        - locationFinder
+      operationId: findLocationById
+      summary: "Find all Location-Information for  given id"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: "one geodata"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeoData'
+  /geodata/states:
+    get:
+      tags:
+        - locationFinder
+      operationId: findAllStates
+      summary: "Find all"
+      responses:
+        '200':
+          description: "all states as geodata"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GeoData'
+  /geodata/admin/{state}:
+    get:
+      tags:
+        - locationFinder
+      operationId: findAllAdminAreas
+      summary: "Find all admin areas within state"
+      parameters:
+        - in: path
+          name: state
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: "all admin area as geodata"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GeoData'
+  /geodata/regional/{adminArea}:
+    get:
+      tags:
+        - locationFinder
+      operationId: findAllRegionalAreasInAdminArea
+      summary: "Find all Regional Areas in Admin Area"
+      parameters:
+        - in: path
+          name: adminArea
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: "all Regional Areas as geodata"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GeoData'
+  /geodata/near:
+    post:
+      tags:
+        - locationFinder
+      operationId: findAllNearGeoData
+      summary: "Find near geodata"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeoNearRequest'
+      responses:
+        '200':
+          description: "all near areas as geodata"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GeoData'
+
   /geodata/by-zip/{zip}:
     get:
       tags:
@@ -1768,7 +1865,17 @@ components:
         geoId:
           type: string
           description: "Links to the GeoJson-Id"
-
+    GeoData:
+      type: object
+      description: ""
+      properties:
+        geometry:
+          $ref: '#/components/schemas/GeodataMultiPolygon'
+        id:
+          type: string
+        properties:
+          type: object
+          additionalProperties: true
     CityInformation:
       type: object
       description: "Returns information of a city"
@@ -1793,6 +1900,33 @@ components:
           type: string
           description: "Name of the Country, the City is in"
           example: "Deutschland"
+
+    GeodataMultiPolygon:
+      type: object
+      properties:
+        coordinates:
+          type: array
+          items:
+            properties:
+              coordinates:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Point'
+
+    Point:
+      type: object
+      properties:
+        x:
+          type: integer
+        y:
+          type: integer
+    GeoNearRequest:
+      type: object
+      properties:
+        point:
+          $ref: '#/components/schemas/Point'
+        distanceInMeters:
+          type: integer
 
 
     LocationType:

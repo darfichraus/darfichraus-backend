@@ -1,7 +1,7 @@
 package de.darfichraus.repository;
 
 
-import de.darfichraus.entity.GeoData;
+import de.darfichraus.model.GeoData;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
